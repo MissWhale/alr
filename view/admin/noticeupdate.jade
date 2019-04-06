@@ -1,0 +1,49 @@
+include ../main.jade
+        script(src='../../js/ckeditor/ckeditor.js')
+        link(rel='stylesheet',href='../../css/board.css')
+        .frame
+                .frametitle
+                        strong 글작성
+                .framebody
+                        .boardwrite
+                                .title
+                                        input#title(type='text' placeholder="제목을 입력해주세요" value=board.brd_title data-num=board.brd_no)
+                                .body
+                                        textarea#write=board.brd_text
+                                .btndiv
+                                        button.allbtn.write 완료
+                                        button.allbtn.close 취소
+        script.
+                CKEDITOR.replace( 'write',{
+                        filebrowserUploadUrl: '/board/imgupload',
+                });
+                $('.close').click(()=>{
+                        history.back()
+                })
+                $('.write').click(()=>{
+                        num=$('#title').data('num')
+                        title=$('#title').val()
+                        body=CKEDITOR.instances.write.getData()
+                        if(!title){
+                                alert('제목을 입력하세요')
+                                return
+                        }else if(!body){
+                                alert('내용을 입력하세요')
+                                return
+                        }else{
+                                $.ajax({
+                                        url:'/notice/noticeupdate',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{title:title,body:body,num:num},
+                                        success:(result)=>{
+                                                if(result){
+                                                        alert('글수정이 완료되었습니다')
+                                                        location.href='/notice/post?num='+num
+                                                }else{
+                                                        alert('글수정이 실패했습니다')
+                                                }
+                                        }
+                                })
+                        }
+                })

@@ -1,0 +1,48 @@
+include ../main.jade
+        script(src='../../js/ckeditor/ckeditor.js')
+        link(rel='stylesheet',href='../../css/board.css')
+        .frame
+                .frametitle
+                        strong 글작성
+                .framebody
+                        .boardwrite
+                                .title
+                                        input#title(type='text' placeholder="제목을 입력해주세요")
+                                .body
+                                        textarea#write
+                                .btndiv
+                                        button.allbtn.write 작성
+                                        button.allbtn.close 취소
+        script.
+                CKEDITOR.replace( 'write',{
+                        filebrowserUploadUrl: '/notice/imgupload',
+                });
+                $('.close').click(()=>{
+                        history.back()
+                })
+                $('.write').click(()=>{
+                        title=$('#title').val()
+                        body=CKEDITOR.instances.write.getData()
+                        if(!title){
+                                alert('제목을 입력하세요')
+                                return
+                        }else if(!body){
+                                alert('내용을 입력하세요')
+                                return
+                        }else{
+                                $.ajax({
+                                        url:'/notice/noticewrite',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{title:title,body:body},
+                                        success:(result)=>{
+                                                if(result.sc){
+                                                        alert('글작성이 완료되었습니다')
+                                                        location.href='/notice/post?num='+result.row
+                                                }else{
+                                                        alert('글작성이 실패했습니다')
+                                                }
+                                        }
+                                })
+                        }
+                })

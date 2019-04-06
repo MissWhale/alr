@@ -1,0 +1,102 @@
+doctype html
+html
+        head
+                meta(charset='utf-8')
+                link(rel='stylesheet',href='../css/base.css')
+                script(src='https://code.jquery.com/jquery-2.2.4.min.js')
+                script(src="https://cdn.jsdelivr.net/npm/vue")
+                link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css')
+                link(rel='stylesheet', href='http://fonts.googleapis.com/earlyaccess/hanna.css')
+
+        body
+            .divtop
+                img.logo(src='../img/logo1.png' onclick='location.href="/"')
+                img.menu#menu(src='../img/menu.png')
+                .menubar#bar
+                        ul
+                                li(onclick='location.href="/work"')
+                                        img(src='../img/work.png')
+                                        span 작업시작
+                                li(onclick='location.href="/"')
+                                        img(src='../img/project.png')
+                                        span 프로젝트
+                                li(onclick='location.href="/board"')
+                                        img(src='../img/board.png')
+                                        span 게시판
+                                li(onclick='location.href="/notice"')
+                                        img(src='../img/notice.png')
+                                        span 공지사항
+                                
+                .search
+                        input.textbox(type='text', placeholder='검색')
+                        input.button(title='Search', value='', type='button')
+                if(log)
+                        .imgdiv
+                                -var pic=user.mem_pic
+                                if(pic)
+                                        img.logpic(src='../../file/usericon/'+pic)
+                                else
+                                        img.logpic(src='../../img/name.png')
+                                .userbar.active
+                                        ul.user
+                                                li(onclick='location.href="/user"')
+                                                        span 내 프로필
+                                                li(onclick='location.href="/user/project"')
+                                                        span 내 프로젝트
+                                                li(onclick='location.href="/user/setting"')
+                                                        span 설정
+                                                li(onclick='location.href="/login/logout"')
+                                                        span 로그아웃
+                        //- button.btn(onclick='location.href="/login/logout"') 로그아웃
+                else
+                        button.btn(onclick='location.href="/login"') 로그인
+                
+            .divmain
+                a(style='display:none')
+        script.
+                $('.imgdiv').click(function(){
+                        $(this).children().eq(1).toggle('fast')
+                })
+                $(document).click(function(e){
+                        var target=e.target
+                        if(!$(target).is('.imgdiv') && !$(target).parent().is('.imgdiv') && $('.userbar').css('display')=='block'){
+                                //- console.log($(target).parent().parent().parent().parent())
+                                //- console.log($(target).parent().parent().is('.user'))
+                                //- console.log($(target).parent().is('.user'))
+                                //- console.log(!($(target).parent().is('.user') || $(target).parent().parent().is('.user')))
+                                //- if(!($(target).parent().is('.user') || $(target).parent().parent().is('.user'))){
+                                        $('.userbar').toggle('fast')
+                                //- }
+                        }
+                })
+                //- $( document ).ready( function() {
+                //-         var jbOffset = $( '.divtop' ).offset();
+                //-         $( window ).scroll( function() {
+                //-                 if ( $( document ).scrollTop() > jbOffset.top ) {
+                //-                         $( '.divtop' ).addClass( 'examfix' );
+                //-                         $( '.divmain' ).addClass( 'pagefix' );
+                //-                 }
+                //-                 else {
+                //-                         $( '.divtop' ).removeClass( 'examfix' );
+                //-                         $( '.divmain' ).removeClass( 'pagefix' );
+                //-                 }
+                //-         });
+                //- });
+                $('#menu').hover(()=>{
+                        //- $('#bar').css('display','block')
+                        $('#bar').toggle()
+                },()=>{
+                        //- $('#bar').css('display','none')
+                        $('#bar').toggle()
+                })
+                $('#bar').hover(()=>{
+                        //- $('#bar').css('display','block')
+                        $('#bar').toggle()
+                        $('#menu').addClass('active')
+                        //- $('#menu').toggle()
+                },()=>{
+                        //- $('#bar').css('display','none')
+                        $('#bar').toggle()
+                        $('#menu').removeClass('active')
+                        //- $('#menu').toggle()
+                })

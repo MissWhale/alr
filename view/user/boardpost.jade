@@ -1,0 +1,283 @@
+include ../main.jade
+        link(rel='stylesheet',href='../../css/board.css')
+        link(rel='stylesheet',href='../../js/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css')
+        script(src='../../js/ckeditor/ckeditor.js')
+        script(src="//cdn.jsdelivr.net/highlight.js/9.5.0/highlight.min.js")
+        .frame
+                .frametitle
+                        .postlike
+                                span=board.brd_reg.format('yyyy-MM-dd')
+                                if(board.brd_like>0)
+                                        img(src='../../img/like3.png' data-ok=1  data-log=1 onclick='like(this)')
+                                else
+                                        if(log)
+                                                img(src='../../img/like2.png' data-ok=0 data-log=1 onclick='like(this)')
+                                        else
+                                                img(src='../../img/like2.png' data-ok=0 data-log=0 onclick='like(this)')
+                        .posttitle
+                                strong=board.brd_title
+                        .postinfo
+                                span=board.mem_nick
+                                .img
+                                        img(src='../../img/view.png')
+                                        span {{brd_cnt}}
+                                        img(src='../../img/comment.png')
+                                        span {{com_cnt}}
+                                        img(src='../../img/like.png')
+                                        span {{brd_like}}
+                .framebody(style='padding-top: 10px;')
+                        .bodybtn
+                                button.allbtn.update 수정
+                                button.allbtn.delete 삭제
+                        .bodypost
+                                p!=board.brd_text
+                        .bodycomment(data-bnum=board.brd_no)
+                                .comtitle
+                                        p 댓글
+                                .com(v-if='len')
+                                        template(v-for='comm in cl')
+                                                .combody
+                                                        .btndiv(v-if='comm.mem')
+                                                                button.allbtn.update(:data-num='comm.num' onclick='update(this)') 수정
+                                                                button.allbtn.delete(:data-num='comm.num' onclick='delcom(this)') 삭제
+                                                        .title
+                                                                img(src='../../img/name.png')
+                                                                span {{comm.nick}}
+                                                                span {{comm.reg}}
+                                                        .body
+                                                                p(v-html='comm.text' v-highlightjs)
+                                .com(v-else)
+                                        .nocom
+                                                p 댓글이 없습니다
+                        if(log)
+                                .comwrite
+                                        .writetitle
+                                                p 댓글작성
+                                        .writebody
+                                                textarea#write
+                                        button.allbtn.insert 작성
+                                        
+        script.
+                function like(img){
+                        var result=$(img).data('ok')
+                        var log=$(img).data('log')
+                        num=$('.bodycomment').data('bnum')
+                        if(log){
+                                if(result){
+                                        $(img).attr('src','../../img/like2.png')
+                                        $.ajax({
+                                                url:'/board/boardlike',
+                                                dataType:'json',
+                                                type:'post',
+                                                data:{num:num,result:result},
+                                                success:function(result){
+                                                }
+                                        })
+                                        result=$(img).data('ok',0)
+                                        commlist.getData()
+                                }else{
+                                        $(img).attr('src','../../img/like3.png')
+                                        $.ajax({
+                                                url:'/board/boardlike',
+                                                dataType:'json',
+                                                type:'post',
+                                                data:{num:num,result:result},
+                                                success:function(result){
+                                                }
+                                        })
+                                        result=$(img).data('ok',1)
+                                        commlist.getData()
+                                }
+                        }else{
+                                alert('로그인시 가능합니다')
+                        }
+                }
+                $('code').each(function(i, block) { 
+                        hljs.highlightBlock(block); 
+                });
+                if(#{log}){
+                        CKEDITOR.replace('write');
+                }
+                $('.bodybtn .update').click(()=>{
+                        num=$('.bodycomment').data('bnum')
+                        location.href='/board/boardupdate?num='+num
+                })
+                $('.bodybtn .delete').click(()=>{
+                        num=$('.bodycomment').data('bnum')
+                        $.ajax({
+                                url:'/board/boarddelete',
+                                dataType:'json',
+                                type:'post',
+                                data:{num:num},
+                                success:(result)=>{
+                                        if(result){
+                                                alert('글이 삭제되었습니다')
+                                                location.href='/board'
+                                        }else{
+                                                alert('글이 삭제되지않았습니다')
+                                        }
+                                }
+                        })
+                })
+                function update(btn){
+                        text=$(btn).text()
+                        num=$(btn).data('num')
+                        if(text=='수정'){
+                                $(btn).text('완료')
+                                $(btn).next().text('취소')
+                                body=$(btn).parent().next().next()
+                                text=body.children().eq(0).text()
+                                html='<textarea id="comup">'+text+'</textarea>'
+                                body.children().eq(0).css('display','none')
+                                body.append(html)
+                                CKEDITOR.replace('comup');
+                        }else{
+                                body=CKEDITOR.instances.comup.getData()
+                                $.ajax({
+                                        url:'/board/commupdate',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{num:num,body:body},
+                                        success:(result)=>{
+                                                if(result){
+                                                        alert('댓글이 수정되었습니다')
+                                                        delcom($(btn).next())
+                                                        commlist.getData()
+                                                }else{
+                                                        alert('댓글이 수정되지않았습니다')
+                                                        delcom($(btn).next())
+                                                        commlist.getData()
+                                                }
+                                        }
+                                })
+                        }
+                }
+                function delcom(btn){
+                        text=$(btn).text()
+                        num=$(btn).data('num')
+                        if(text=='취소'){
+                                $(btn).text('삭제')
+                                $(btn).prev().text('수정')
+                                body=$(btn).parent().next().next()
+                                body.children().eq(0).css('display','block')
+                                body.children().eq(1).remove()
+                                body.children().eq(1).remove()
+                        }else{
+                                $.ajax({
+                                        url:'/board/commdelete',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{num:num},
+                                        success:(result)=>{
+                                                if(result){
+                                                        alert('댓글이 삭제되었습니다')
+                                                        commlist.getData()
+                                                }else{
+                                                        alert('댓글이 삭제되지않았습니다')
+                                                        commlist.getData()
+                                                }
+                                        }
+                                })
+                        }
+                }
+                $('.insert').click(()=>{
+                        body=CKEDITOR.instances.write.getData()
+                        $.ajax({
+                                url:'/board/commwrite',
+                                dataType:'json',
+                                type:'post',
+                                data:{body:body,num:$('.bodycomment').data('bnum')},
+                                success:(result)=>{
+                                        if(result){
+                                                alert('댓글이 작성되었습니다')
+                                        }else{
+                                                alert('댓글작성이 실패하였습니다')
+                                        }
+                                }
+                        })
+                        CKEDITOR.instances.write.setData('')
+                        commlist.getData()
+                })
+                var commlist=null
+                var boardlist=null
+                window.onload = function(){
+                        commlist = new Vue({
+                                el:".bodycomment",
+                                data:{
+                                        cl:[],
+                                        len:false
+                                },
+                                mounted:function(){
+                                        this.getData()
+                                },
+                                methods:{
+                                        getData:function(){
+                                                $.ajax({
+                                                        url:'/board/commread',
+                                                        dataType:'json',
+                                                        type:'POST',
+                                                        data:{num:$('.bodycomment').data('bnum')},
+                                                        success:function(result){
+                                                                var data=[]
+                                                                if(result.ss){
+                                                                        boardlist.brd_cnt=result.board.brd_cnt
+                                                                        boardlist.brd_like=result.board.brd_like
+                                                                        boardlist.com_cnt=result.board.com_cnt
+                                                                        if(result.result.length>0){
+                                                                                for(i=0;i<result.result.length;i++){
+                                                                                        mem=false
+                                                                                        if(#{no}==result.result[i].mem_no){
+                                                                                                mem=true
+                                                                                        }
+                                                                                        data.push({num:result.result[i].bc_no,
+                                                                                                mem:mem,
+                                                                                                nick:result.result[i].mem_nick,
+                                                                                                reg:result.result[i].bc_reg,
+                                                                                                text:result.result[i].bc_text})
+                                                                                }
+                                                                                commlist.len=true
+                                                                        }else{
+                                                                                commlist.len=false
+                                                                        }
+                                                                }else{
+                                                                        commlist.len=false
+                                                                }
+                                                                commlist.cl=data
+                                                        }
+                                                })
+                                        }
+                                }
+                        });
+                        boardlist=new Vue({
+                                el:'.frametitle',
+                                data:{
+                                        brd_cnt:0,
+                                        brd_like:0,
+                                        com_cnt:0
+                                },
+                                mounted:function(){
+                                        commlist.getData()
+                                }
+                        })
+                }
+                Vue.directive('highlightjs', {
+                        deep: true,
+                        bind: function(el, binding) {
+                                let targets = el.querySelectorAll('code')
+                                targets.forEach((target) => {
+                                        if (binding.value) {
+                                                target.textContent = binding.value
+                                        }
+                                        hljs.highlightBlock(target)
+                                })
+                        },
+                        componentUpdated: function(el, binding) {
+                                let targets = el.querySelectorAll('code')
+                                targets.forEach((index,target) => {
+                                        if (binding.value) {
+                                                target.textContent = binding.value
+                                                hljs.highlightBlock(target)
+                                        }
+                                })
+                        }
+                })

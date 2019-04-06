@@ -1,0 +1,250 @@
+include ../main.jade
+        link(rel='stylesheet',href='../css/login.css')
+        .login.register
+            .logintitle
+                img(src='../../img/logo.png')
+                strong 회원가입!!
+            .loginbody
+                .login_input
+                    .input_line#email
+                        .imgbox
+                            img(src='../../img/mail.png')
+                        label(v-model='emailstatus' v-bind:class='{active:isActive}') {{ emailstatus }}
+                        input.textbox(type='text' v-model='email' autocomplete="off" style='ime-mode:disabled;')
+                    .input_line#pw
+                        .imgbox
+                            img(src='../../img/pw.png')
+                        label(v-model='pwstatus' v-bind:class='{active:isActive}') {{ pwstatus }}
+                        input.textbox(type='password' v-model='pw' autocomplete="off" style='ime-mode:disabled;')
+                    .input_line#pwok
+                        .imgbox
+                            img(src='../../img/pw.png')
+                        label(v-model='pwokstatus' v-bind:class='{active:isActive}') {{ pwokstatus }}
+                        input.textbox(type='password' v-model='pwok' autocomplete="off" style='ime-mode:disabled;')
+                    .input_line#nickname
+                        .imgbox
+                            img(src='../../img/name.png')
+                        label(v-model='nickstatus' v-bind:class='{active:isActive}') {{ nickstatus }}
+                        input.textbox(type='text' v-on:input='nick' v-bind:value='vnick' autocomplete="off" onkeyup="trim(this);")
+                .login_btn
+                    button.btn#register 회원가입
+                    button.btn#close 취소
+        script.
+                var vue_nick=new Vue({
+                        el:'#nickname',
+                        data:{
+                                vnick:'',
+                                nickstatus:'닉네임',
+                                isActive:false,
+                                isok:false
+                        },
+                        methods:{
+                                nick(e){
+                                        this.vnick = e.target.value
+                                        if(this.vnick==''){
+                                                vue_nick.nickstatus='닉네임'
+                                                vue_nick.isActive=false
+                                                vue_nick.isok=false
+                                        }else if(this.vnick.indexOf(' ')>-1){
+                                                vue_nick.nickstatus='공백은 사용할 수 없습니다.'
+                                                if(this.vnick==''){
+                                                        vue_nick.isActive=false
+                                                        vue_nick.isok=false
+                                                }else{
+                                                        vue_nick.isActive=true
+                                                        vue_nick.isok=false
+                                                }
+                                        }else if(this.vnick.length<4 || this.vnick.length>10){
+                                                vue_nick.isActive=true
+                                                vue_nick.isok=false
+                                                vue_nick.nickstatus='닉네임은 4자이상 10자이하로 가능합니다'
+                                        }else if(!checknick(this.vnick)){
+                                                vue_nick.isActive=true
+                                                vue_nick.isok=false
+                                                vue_nick.nickstatus='닉네임은 숫자,한글,영어만 사용가능합니다'
+                                        }else{
+                                                vue_nick.isActive=true
+                                                $.ajax({
+                                                        url: '/login/nickok',           
+                                                        dataType: 'json',                  
+                                                        type: 'POST',                      
+                                                        data: {nick:e.target.value},      
+                                                        success: function(result) {
+                                                                if(result){
+                                                                        vue_nick.nickstatus='사용가능한 닉네임입니다'
+                                                                        vue_nick.isok=true
+                                                                }else{
+                                                                        vue_nick.nickstatus='중복된 닉네임입니다'
+                                                                        vue_nick.isok=false
+                                                                }
+                                                        }
+                                                })
+                                        }
+                                }
+                        }
+                })
+                var vue_pw=new Vue({
+                        el:'#pw',
+                        data:{
+                                pw:'',
+                                pwstatus:'비밀번호',
+                                isActive:false,
+                                isok:false
+                        },
+                        updated:()=>{
+                                vue_pw.pw=vue_pw.pw.replace(/ /gi,'')
+                                if(vue_pw.pw==''){
+                                        vue_pw.pwstatus='비밀번호'
+                                        vue_pw.isActive=false
+                                        vue_pw.isok=false
+                                }else if(vue_pw.pw.length<6 || vue_pw.pw.length>12){
+                                        vue_pw.isActive=true
+                                        vue_pw.isok=false
+                                        vue_pw.pwstatus='비밀번호는 6자이상 12장이하로 가능합니다'
+                                }else if(!checkpw(vue_pw.pw)){
+                                        vue_pw.isActive=true
+                                        vue_pw.isok=false
+                                        vue_pw.pwstatus='숫자와 영어를 조합하세요'
+                                }else{
+                                        vue_pw.isActive=true
+                                        vue_pw.pwstatus='사용가능한 비밀번호입니다'
+                                        if(vue_pwok.pwok!=vue_pw.pw){
+                                                vue_pw.isok=false
+                                                if(vue_pwok.pwok!=''){
+                                                        vue_pwok.pwokstatus='비밀번호가 일치하지 않습니다'
+                                                }
+                                        }else{
+                                                vue_pw.isok=true
+                                                vue_pwok.isok=true
+                                                vue_pwok.pwokstatus='비밀번호가 일치합니다'
+                                        }
+                                }
+                        }
+                })
+                var vue_pwok=new Vue({
+                        el:'#pwok',
+                        data:{
+                                pwok:'',
+                                pwokstatus:'비밀번호확인',
+                                isActive:false,
+                                isok:false
+                        },
+                        updated:()=>{
+                                vue_pwok.pwok=vue_pwok.pwok.replace(/ /gi,'')
+                                if(vue_pwok.pwok==''){
+                                        vue_pwok.pwokstatus='비밀번호확인'
+                                        vue_pwok.isActive=false
+                                        vue_pwok.isok=false
+                                }else if(vue_pwok.pwok!=vue_pw.pw){
+                                        vue_pwok.isActive=true
+                                        vue_pwok.isok=false
+                                        vue_pw.isok=false
+                                        vue_pwok.pwokstatus='비밀번호가 일치하지 않습니다'
+                                }else{
+                                        vue_pwok.isActive=true
+                                        vue_pwok.isok=true
+                                        vue_pw.isok=true
+                                        vue_pwok.pwokstatus='비밀번호가 일치합니다'
+                                }
+                        }
+                })
+                var vue_email=new Vue({
+                        el:'#email',
+                        data:{
+                                email:'',
+                                emailstatus:'이메일',
+                                isActive:false,
+                                isok:false
+                        },
+                        updated:()=>{
+                                vue_email.email=vue_email.email.replace(/ /gi, '')
+                                if(vue_email.email==''){
+                                        vue_email.emailstatus='이메일'
+                                        vue_email.isActive=false
+                                        vue_email.isok=false
+                                }
+                                else if(!checkEmail(vue_email.email)){
+                                        vue_email.isActive=true
+                                        vue_email.isok=false
+                                        vue_email.emailstatus='이메일형식이 일치하지않습니다.'
+                                }else{
+                                        vue_email.isActive=true
+                                        $.ajax({
+                                                url: '/login/emailok',           
+                                                dataType: 'json',                  
+                                                type: 'POST',                      
+                                                data: {email:vue_email.email},      
+                                                success: function(result) {
+                                                        if(result){
+                                                                vue_email.emailstatus='사용가능한 이메일입니다'
+                                                                vue_email.isok=true
+                                                        }else{
+                                                                vue_email.emailstatus='중복된 이메일입니다'
+                                                                vue_email.isok=false
+                                                        }
+                                                }
+                                        })
+                                }
+                        }
+                })
+                $('#register').click(()=>{
+                        email=vue_email.isok
+                        pw=vue_pw.isok
+                        pwok=vue_pwok.isok
+                        nick=vue_nick.isok
+                        if(!email){
+                                vue_email.emailstatus='이메일이 올바르지 않습니다'
+                        }else if(!pw){
+                                vue_pw.pwstatus='비밀번호가 올바르지 않습니다'
+                        }else if(!pwok){
+                                vue_pwok.pwokstatus='비밀번호확인이 올바르지 않습니다'
+                        }else if(!nick){
+                                vue_nick.nickstatus='닉네임이 올바르지 않습니다'
+                        }else{
+                                $.ajax({
+                                        url: '/login/register',           
+                                        dataType: 'json',                  
+                                        type: 'POST',                      
+                                        data: {email:vue_email.email,pw:vue_pw.pw,nick:vue_nick.vnick},      
+                                        success: function(result) {
+                                                if(result){
+                                                        alert('회원가입이 성공하였습니다')
+                                                        location.href='/'
+                                                }else{
+                                                        alert('회원가입이 실패하였습니다')
+                                                }
+                                        }
+                                })
+                        }
+
+                })
+                $('#close').click(()=>{
+                        location.href='/login'
+                })
+                function trim(obj){ //공백제거
+                        $(obj).val($(obj).val().replace(/ /gi, ''))
+                        return;
+                };
+                function checkpw(pw){
+                        var pattern = /^.*(?=.)(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+                        if(pattern.test(pw)) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                }
+                function checknick(nick){
+                        var pattern = /^[가-힣|a-z|A-Z|0-9|\*]+$/;
+                        if(pattern.test(nick)) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                }
+                function checkEmail(email) { 
+                        var pattern = /^([0-9a-zA-Z_-]+)@([0-9a-zA-Z_-]+)(\.com+){1,2}$/; 
+                        if(pattern.test(email)) {
+                                return true;
+                        } else {
+                                return false;
+                }};

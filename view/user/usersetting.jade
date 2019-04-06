@@ -1,0 +1,141 @@
+include ../main.jade
+        link(rel='stylesheet',href='../../css/user.css')
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js")
+        scirpt(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ext-language_tools.js")
+        link(rel='stylesheet', href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css')
+        link(rel='stylesheet', href='//cdn.jsdelivr.net/npm/nanum-gothic-coding@4.0.0/nanum-gothic-coding.min.css')
+        link(rel='stylesheet', href='http://cdn.jsdelivr.net/gh/joungkyun/font-d2coding/d2coding.css')
+        link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/source-code-pro@2.30.0/source-code-pro.css')
+        .frame
+                .frametitle
+                        strong 설정
+                .framebody
+                        .setting
+                                .theme.settingblock
+                                        p.settingtitle 테마
+                                        .dark
+                                                ul
+                                                        li
+                                                                input#radio1(name='radio', type='radio' value='ace/theme/tomorrow_night' v-model='theme')
+                                                                label(for='radio1') Tomorrow Night
+                                                        li
+                                                                input#radio2(name='radio', type='radio' value='ace/theme/dracula' v-model='theme')
+                                                                label(for='radio2') Dracula
+                                                        li
+                                                                input#radio3(name='radio', type='radio' value='ace/theme/ambiance' v-model='theme')
+                                                                label(for='radio3') Ambiance
+                                                        li
+                                                                input#radio4(name='radio', type='radio' value='ace/theme/monokai' v-model='theme')
+                                                                label(for='radio4') Monokai
+                                        .white
+                                                ul
+                                                        li
+                                                                input#radio5(name='radio', type='radio' value='ace/theme/chrome' v-model='theme')
+                                                                label(for='radio5') Chrome
+                                                        li
+                                                                input#radio6(name='radio', type='radio' value='ace/theme/dreamweaver' v-model='theme')
+                                                                label(for='radio6') Dreamweaver
+                                                        li
+                                                                input#radio7(name='radio', type='radio' value='ace/theme/eclipse' v-model='theme')
+                                                                label(for='radio7') Eclipse
+                                                        li
+                                                                input#radio8(name='radio', type='radio' value='ace/theme/xcode' v-model='theme')
+                                                                label(for='radio8') XCode
+                                .font.settingblock
+                                        p.settingtitle 폰트
+                                        .fonttype
+                                                p 글씨체
+                                                span.dropdown-el
+                                                        input#nanumgothic(type='radio', name='font', value='Nanum Gothic', checked='checked' v-model='font')
+                                                        label(for='nanumgothic') 나눔고딕
+                                                        input#hack(type='radio', name='font', value='Hack' v-model='font')
+                                                        label(for='hack') Hack
+                                                        input#d2coding(type='radio', name='font', value='D2 coding' v-model='font')
+                                                        label(for='d2coding') D2 coding
+                                                        input#sourcecodepro(type='radio', name='font', value='Source Code Pro' v-model='font')
+                                                        label(for='sourcecodepro') Source Code Pro
+                                                        input#consolas(type='radio', name='font', value='Consolas' v-model='font')
+                                                        label(for='consolas') Consolas
+                                        .fontsize
+                                                p 글씨크기
+                                                span.dropdown-el.sz
+                                                        input#10px(type='radio', name='size', value='10px', checked='checked' v-model='size')
+                                                        label.sz(for='10px') 10px
+                                                        input#12px(type='radio', name='size', value='12px' v-model='size')
+                                                        label.sz(for='12px') 12px
+                                                        input#14px(type='radio', name='size', value='14px' v-model='size')
+                                                        label.sz(for='14px') 14px
+                                                        input#16px(type='radio', name='size', value='16px' v-model='size')
+                                                        label.sz(for='16px') 16px
+                                                        input#18px(type='radio', name='size', value='18px' v-model='size')
+                                                        label.sz(for='18px') 18px
+                                                        input#20px(type='radio', name='size', value='20px' v-model='size')
+                                                        label.sz(for='20px') 20px
+                                .ex.settingblock
+                                        p.settingtitle 예시
+                                        .exarea
+                                                textarea#excode.exam(name='code',rows='15')=text
+        script.
+                theme='#{user.mo_theme}'
+                font='#{user.mo_font}'
+                size='#{user.mo_size}'
+                var setting=new Vue({
+                        el:'.setting',
+                        data:{
+                                theme:theme,
+                                font:font,
+                                size:size
+                        },
+                        updated:function(){
+                                editor.setTheme(this.theme);
+                                $('.exarea').children().css('font-size',this.size)
+                                $('.exarea').children().css('font-family',this.font)
+                                $.ajax({
+                                        url:'/user/settingupdate',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{theme:setting.theme,size:setting.size,font:setting.font},
+                                        success:(result)=>{
+                                        }
+                                })
+                        }
+                })
+                var textarea = $('textarea');
+                var editDiv = $('<div>', {
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100px',
+                        'class': textarea.attr('class')
+                }).insertBefore(textarea);
+                var editor = ace.edit(editDiv[0]);
+                editor.renderer.setShowGutter(false);
+                editor.getSession().setMode("ace/mode/javascript");
+                textarea.css('display', 'none');
+                editor.getSession().setValue(textarea.val());
+                editor.setTheme(theme);
+                editor.setReadOnly(true)
+                editor.setOptions({
+                        autoScrollEditorIntoView: true,
+                        maxLines: 20,
+                        showPrintMargin:false,
+                        highlightActiveLine: false, 
+                        highlightGutterLine: false
+                })
+                $('.exarea').children().css('font-size',size)
+                $('.exarea').children().css('font-family',font)
+                $('.dropdown-el').click(function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(this).toggleClass('expanded');
+                        if($(e.target).attr('for')){
+                                $('#'+$(e.target).attr('for')).prop('checked',true);
+                        }
+                        if($(e.target).hasClass('sz')){
+                                setting.size=$(e.target).attr('for')
+                        }else{
+                                setting.font=$('#'+$(e.target).attr('for')).val()
+                        }
+                });
+                $(document).click(function() {
+                        $('.dropdown-el').removeClass('expanded');
+                });

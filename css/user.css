@@ -1,0 +1,439 @@
+.framebody .user {
+  width: 800px;
+  margin: 0 auto; }
+
+.framebody .user span {
+  font-size: 16px;
+  width: 70px;
+  display: inline-block; }
+
+.framebody .user input {
+  outline: 0;
+  height: 26px;
+  margin: 0px 0px 10px 20px;
+  line-height: 35px;
+  padding: 0 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #212121;
+  border: none;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+
+.framebody .user .userblock {
+  padding: 30px 20px;
+  background: rgba(38, 50, 56, 0.2);
+  display: inline-block; }
+
+.framebody .user .usertitle {
+  padding-bottom: 20px;
+  border-bottom: 1px solid;
+  font-size: 18px; }
+
+.framebody .user .thumb {
+  width: 335px; }
+
+.framebody .user .thumb .img {
+  width: 100px;
+  margin: 30px auto; }
+
+.framebody .user .thumb .img img {
+  width: 100px;
+  height: 100px;
+  border: 1px solid; }
+
+.framebody .user .thumb .input {
+  margin: 0 auto;
+  width: 260px; }
+
+.framebody .user .thumb .input input {
+  border: 1px solid gray;
+  border-radius: 3px;
+  margin: 0px;
+  width: 260px;
+  height: auto;
+  padding: 0 5px; }
+
+.framebody .user .nick {
+  width: 335px;
+  margin-left: 60px;
+  position: absolute; }
+
+.framebody .user .nick .body {
+  margin: 50px 30px 82px 30px; }
+
+.framebody .user .nick .body button {
+  position: absolute;
+  right: 45px;
+  bottom: 30px; }
+
+.framebody .user .nick .body label {
+  position: absolute;
+  top: 190px;
+  left: 150px; }
+
+.framebody .user .pwupdate {
+  margin-top: 50px;
+  height: 216.5px;
+  padding: 30px 20px 50px 20px; }
+
+.framebody .user .pwupdate .pbody {
+  margin: 30px; }
+
+.framebody .user .pwupdate .pbody input {
+  width: 210px; }
+
+.framebody .user .pwupdate .pbody button {
+  float: right;
+  top: 10px;
+  right: -10px; }
+
+.framebody .user .pwupdate span {
+  width: 130px; }
+
+.framebody .user .pwupdate label {
+  position: relative;
+  left: 160px; }
+
+.framebody .user .retire {
+  position: relative;
+  top: -59px;
+  left: 50px;
+  width: 220px;
+  height: 236px; }
+
+.framebody .user .retire .rbody {
+  padding: 65px 30px; }
+
+.framebody .user .retire .rbody button {
+  margin: 0 auto;
+  display: block;
+  padding: 10px 45px;
+  font-size: 19px;
+  background: #f13333;
+  border-right: 3px solid red;
+  border-bottom: 5px solid red;
+  text-shadow: 0px -2px red; }
+
+.framebody .user .retire .rbody button:active {
+  transform: translate(3px, 5px);
+  -webkit-transform: translate(3px, 5px);
+  border-right: 1px solid;
+  border-bottom: 1px solid; }
+
+.framebody .setting {
+  width: 800px;
+  margin: 0 auto; }
+
+.framebody .setting label {
+  cursor: pointer;
+  display: inline-block; }
+
+.framebody .setting .settingtitle {
+  padding-bottom: 20px;
+  border-bottom: 1px solid;
+  font-size: 18px; }
+
+.framebody .setting .settingblock {
+  padding: 30px 20px;
+  background: rgba(38, 50, 56, 0.2);
+  display: inline-block; }
+
+.framebody .setting .theme .dark, .framebody .setting .theme .white {
+  display: inline-block;
+  padding: 10px;
+  margin: 30px 10px 10px 10px;
+  width: 160px; }
+
+.framebody .setting .theme .dark {
+  background: #2e2e2e;
+  color: white; }
+
+.framebody .setting .theme .dark input[type="radio"]:focus + label:before,
+.framebody .setting .theme .dark input[type="radio"]:hover + label:before {
+  border-color: white; }
+
+.framebody .setting .theme .white {
+  background: white; }
+
+.framebody .setting .theme input[type="radio"] {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; }
+
+.framebody .setting .theme input[type="radio"]:focus + label:before,
+.framebody .setting .theme input[type="radio"]:hover + label:before {
+  border-color: black; }
+
+.framebody .setting .theme input[type="radio"]:active + label:before {
+  -webkit-transition-duration: 0;
+  transition-duration: 0;
+  -webkit-filter: brightness(0.2);
+  filter: brightness(0.2); }
+
+.framebody .setting .theme input[type="radio"] + label {
+  position: relative;
+  padding: 10px;
+  padding-left: 2em;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.framebody .setting .theme input[type="radio"] + label:before {
+  box-sizing: content-box;
+  content: '';
+  color: #900;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  margin-top: -9px;
+  border: 2px solid grey;
+  text-align: center; }
+
+.framebody .setting .theme input[type="radio"] + label:after {
+  box-sizing: content-box;
+  content: '';
+  background-color: #900;
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  -webkit-transform-origin: 50%;
+  transform-origin: 50%;
+  -webkit-transition: -webkit-transform 200ms ease-out;
+  transition: -webkit-transform 200ms ease-out;
+  transition: transform 200ms ease-out;
+  transition: transform 200ms ease-out, -webkit-transform 200ms ease-out; }
+
+.framebody .setting .theme input[type="radio"]:checked + label:before {
+  -webkit-animation: borderscale 300ms ease-in;
+  animation: borderscale 300ms ease-in;
+  background-color: white; }
+
+.framebody .setting .theme input[type="radio"]:checked + label:after {
+  -webkit-transform: scale(1);
+  transform: scale(1); }
+
+.framebody .setting .theme input[type="radio"] + label:before,
+.framebody .setting .theme input[type="radio"] + label:after {
+  border-radius: 50%; }
+
+@-webkit-keyframes borderscale {
+  50% {
+    box-shadow: 0 0 0 2px #900; } }
+
+@keyframes borderscale {
+  50% {
+    box-shadow: 0 0 0 2px #900; } }
+
+.framebody .setting .theme input:focus {
+  border: 1px solid black; }
+
+.framebody .setting .theme input:not(:focus):invalid {
+  border: 1px solid red;
+  outline: none; }
+
+.framebody .setting .theme input:not(:focus):valid {
+  border: 1px solid green; }
+
+.framebody .setting .font {
+  width: 260px;
+  height: 248.5px;
+  margin-left: 50px;
+  position: relative;
+  top: -45px; }
+
+.framebody .setting .font .fonttype, .framebody .setting .font .fontsize {
+  margin: 50px 20px; }
+
+.framebody .setting .font .fonttype p, .framebody .setting .font .fontsize p {
+  width: 50px;
+  display: inline-block; }
+
+.framebody .setting .font .fonttype .dropdown-el {
+  z-index: 5; }
+
+.framebody .setting .font .sz label {
+  padding-right: 120px !important; }
+
+.framebody .setting .font .dropdown-el {
+  min-width: 12em;
+  position: absolute;
+  display: inline-block;
+  margin-right: 1em;
+  margin-top: -5px;
+  min-height: 2em;
+  max-height: 2em;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  color: #444;
+  outline: none;
+  border: .06em solid transparent;
+  border-radius: 1em;
+  background-color: #cde4f5;
+  transition: 0.3s all ease-in-out; }
+
+.framebody .setting .font .dropdown-el input {
+  display: none; }
+
+.framebody .setting .font .dropdown-el label {
+  border-top: .06em solid #d9d9d9;
+  display: block;
+  height: 2em;
+  line-height: 2em;
+  padding-left: 1em;
+  padding-right: 3em;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s color ease-in-out; }
+
+.framebody .setting .font .dropdown-el label:nth-child(2) {
+  margin-top: 2em;
+  border-top: .06em solid #d9d9d9; }
+
+.framebody .setting .font .dropdown-el input:checked + label {
+  display: block;
+  border-top: none;
+  position: absolute;
+  top: 0; }
+
+.framebody .setting .font .dropdown-el input:checked + label:nth-child(2) {
+  margin-top: 0;
+  position: relative; }
+
+.framebody .setting .font .dropdown-el::after {
+  content: "";
+  position: absolute;
+  right: 0.8em;
+  top: 0.9em;
+  border: 0.3em solid #3694d7;
+  border-color: #3694d7 transparent transparent transparent;
+  transition: .4s all ease-in-out; }
+
+.framebody .setting .font .dropdown-el.expanded {
+  border: 0.06em solid #3694d7;
+  background: #fff;
+  border-radius: .25em;
+  padding: 0;
+  box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 5px 0px;
+  max-height: 15em; }
+
+.framebody .setting .font .dropdown-el.expanded label {
+  border-top: .06em solid #d9d9d9; }
+
+.framebody .setting .font .dropdown-el.expanded label:hover {
+  color: #3694d7; }
+
+.framebody .setting .font .dropdown-el.expanded input:checked + label {
+  color: #3694d7; }
+
+.framebody .setting .font .dropdown-el.expanded::after {
+  transform: rotate(-180deg);
+  top: .55em; }
+
+.framebody .setting .ex {
+  width: 94.5%; }
+
+.framebody .setting .ex .exarea {
+  width: 100%;
+  margin-top: 30px; }
+
+.framebody .setting .ex .exarea textarea {
+  width: 100%; }
+
+.framebody .order {
+  position: absolute;
+  margin: 12px 0px 0px 340px; }
+
+.framebody .order .dropdown-el {
+  min-width: 12em;
+  position: absolute;
+  display: inline-block;
+  margin-right: 1em;
+  margin-top: -5px;
+  min-height: 2em;
+  max-height: 2em;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  color: #444;
+  outline: none;
+  border: .06em solid transparent;
+  border-radius: 1em;
+  border: 1px solid #3694d7;
+  transition: 0.3s all ease-in-out; }
+
+.framebody .order .dropdown-el input {
+  display: none; }
+
+.framebody .order .dropdown-el label {
+  border-top: .06em solid #d9d9d9;
+  display: block;
+  height: 2em;
+  line-height: 2em;
+  padding-left: 1em;
+  padding-right: 3em;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s color ease-in-out; }
+
+.framebody .order .dropdown-el label:nth-child(2) {
+  margin-top: 2em;
+  border-top: .06em solid #d9d9d9; }
+
+.framebody .order .dropdown-el input:checked + label {
+  display: block;
+  border-top: none;
+  position: absolute;
+  top: 0; }
+
+.framebody .order .dropdown-el input:checked + label:nth-child(2) {
+  margin-top: 0;
+  position: relative; }
+
+.framebody .order .dropdown-el::after {
+  content: "";
+  position: absolute;
+  right: 0.8em;
+  top: 0.9em;
+  border: 0.3em solid #3694d7;
+  border-color: #3694d7 transparent transparent transparent;
+  transition: .4s all ease-in-out; }
+
+.framebody .order .dropdown-el.expanded {
+  border: 0.06em solid #3694d7;
+  background: #fff;
+  border-radius: .25em;
+  padding: 0;
+  box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 5px 0px;
+  max-height: 15em; }
+
+.framebody .order .dropdown-el.expanded label {
+  border-top: .06em solid #d9d9d9; }
+
+.framebody .order .dropdown-el.expanded label:hover {
+  color: #3694d7; }
+
+.framebody .order .dropdown-el.expanded input:checked + label {
+  color: #3694d7; }
+
+.framebody .order .dropdown-el.expanded::after {
+  transform: rotate(-180deg);
+  top: .55em; }

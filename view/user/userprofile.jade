@@ -1,0 +1,292 @@
+include ../main.jade
+        link(rel='stylesheet',href='../../css/user.css')
+        .frame
+                .frametitle
+                        strong 내 프로필
+                .framebody
+                        .user.uservue
+                                .thumb.userblock
+                                        p.usertitle 썸네일
+                                        .img
+                                                img(:src='img')
+                                        .input
+                                                input(type='file' @change="imgchange" accept="image/*" id='file' ref='file')
+                                .nick.userblock
+                                        p.usertitle 닉네임
+                                        .body
+                                                span 현재 닉네임
+                                                input(type='text' v-bind:value='oldnick' readonly)
+                                                br
+                                                span 바꿀 닉네임
+                                                input(type='text' @input='nickinput' @keyup.space='trim' v-bind:value='newnick' autocomplete="off")
+                                                label(v-bind:class='{active:isActive}') {{nickstat}}
+                                                button.allbtn(@click='nickchange') 수정
+                                .pwupdate.userblock
+                                        p.usertitle 비밀번호변경
+                                        .pbody
+                                                span 현재 비밀번호
+                                                input(type='password' v-model='oldpw')
+                                                br
+                                                span 새로운 비밀번호
+                                                input(type='password' v-vind:value='newpw' @input='pwinput')
+                                                br
+                                                span 새로운 비밀번호 확인
+                                                input(type='password' v-vind:value='newpwok' @input='pwokinput')
+                                                br
+                                                label(v-bind:class='{active:ispwActive}') {{pwstat}}
+                                                br
+                                                button.allbtn(@click='pwchange') 수정
+                                .retire.userblock
+                                        p.usertitle 계정탈퇴
+                                        .rbody
+                                                button.allbtn(@click='retire') 계정 탈퇴
+                                
+        script.
+                user=new Vue({
+                        el:'.uservue',
+                        data:{
+                                img:'../../img/name.png',
+                                src:'../../file/usericon/',
+                                oldnick:'',
+                                newnick:'',
+                                nickstat:'',
+                                isnickok:false,
+                                isActive:false,
+                                oldpw:'',
+                                newpw:'',
+                                newpwok:'',
+                                pwstat:'',
+                                ispwok:false,
+                                ispwActive:false
+                        },
+                        methods:{
+                                nickinput(e){
+                                        this.newnick = e.target.value
+                                        if(this.newnick==''){
+                                                this.nickstat=''
+                                                this.isActive=false
+                                                this.isnickok=false
+                                        }else if(this.newnick.indexOf(' ')>-1){
+                                                this.nickstat='공백은 사용할 수 없습니다.'
+                                                this.isnickok=false
+                                                if(this.newnick==''){
+                                                        this.isActive=false
+                                                }else{
+                                                        this.isActive=true
+                                                }
+                                        }else if(this.newnick.length<4 || this.newnick.length>10){
+                                                this.isActive=true
+                                                this.isnickok=false
+                                                this.nickstat='닉네임은 4자이상 10자이하로 가능합니다'
+                                        }else if(!checknick(this.newnick)){
+                                                this.isActive=true
+                                                this.isnickok=false
+                                                this.nickstat='닉네임은 숫자,한글,영어만 사용가능합니다'
+                                        }else{
+                                                this.isActive=true
+                                                $.ajax({
+                                                        url: '/login/nickok',           
+                                                        dataType: 'json',                  
+                                                        type: 'POST',                      
+                                                        data: {nick:user.newnick},      
+                                                        success: function(result) {
+                                                                if(result){
+                                                                        user.nickstat='사용가능한 닉네임입니다'
+                                                                        user.isnickok=true
+                                                                }else{
+                                                                        user.nickstat='중복된 닉네임입니다'
+                                                                        user.isnickok=false
+                                                                }
+                                                        }
+                                                })
+                                        }
+                                },
+                                pwinput(e){
+                                        this.newpw = e.target.value
+                                        if(this.newpw==''){
+                                                this.pwstat=''
+                                                this.ispwActive=false
+                                                this.ispwok=false
+                                        }else if(this.newpw.length<6 || this.newpw.length>12){
+                                                this.ispwActive=true
+                                                this.ispwok=false
+                                                this.pwstat='비밀번호는 6자이상 12장이하로 가능합니다'
+                                        }else if(!checkpw(this.newpw)){
+                                                this.ispwActive=true
+                                                this.ispwok=false
+                                                this.pwstat='숫자와 영어를 조합하세요'
+                                        }else{
+                                                this.ispwActive=true
+                                                this.pwstat='사용가능한 비밀번호입니다'
+                                                if(this.newpwok!=this.newpw){
+                                                        this.ispwok=false
+                                                        if(this.newpwok!=''){
+                                                                this.pwstat='새로운 비밀번호가 서로 일치하지 않습니다'
+                                                        }
+                                                }else{
+                                                        this.ispwok=true
+                                                        this.pwstat='새로운 비밀번호가 서로 일치합니다'
+                                                }
+                                        }
+                                },
+                                pwokinput(e){
+                                        this.newpwok = e.target.value
+                                        if(this.newpwok==''){
+                                                this.pwstat=''
+                                                this.ispwActive=false
+                                                this.ispwok=false
+                                        }else if(this.newpwok!=this.newpw){
+                                                this.ispwActive=true
+                                                this.ispwok=false
+                                                this.pwstat='새로운 비밀번호가 서로 일치하지 않습니다'
+                                        }else if(this.newpw.length<6 || this.newpw.length>12){
+                                                this.ispwActive=true
+                                                this.ispwok=false
+                                                this.pwstat='비밀번호는 6자이상 12장이하로 가능합니다'
+                                        }else if(!checkpw(this.newpwok)){
+                                                this.ispwActive=true
+                                                this.ispwok=false
+                                                this.pwstat='숫자와 영어를 조합하세요'
+                                        }else{
+                                                this.ispwActive=true
+                                                this.ispwok=true
+                                                this.pwstat='새로운 비밀번호가 서로 일치합니다'
+                                        }
+                                },
+                                trim(){
+                                        this.newnick = this.newnick.replace(/ /gi, '')
+                                        this.oldpw = this.oldpw.replace(/ /gi, '')
+                                        this.newpw = this.newpw.replace(/ /gi, '')
+                                        this.newpwok = this.newpwok.replace(/ /gi, '')
+                                },
+                                nickchange(){
+                                        if(this.isnickok){
+                                                $.ajax({
+                                                        url:'/user/nickchange',
+                                                        dataType:'json',
+                                                        type:'post',
+                                                        data:{nick:user.newnick},
+                                                        success:(result)=>{
+                                                                if(result){
+                                                                        user.oldnick=user.newnick
+                                                                        user.newnick=''
+                                                                        user.nickstat=''
+                                                                        user.isActive=false
+                                                                        alert('닉네임이 변경되었습니다')
+                                                                }else{
+                                                                        user.newnick=''
+                                                                        user.nickstat=''
+                                                                        user.isActive=false
+                                                                        alert('닉네임이 변경되지 못했습니다')
+                                                                }
+                                                        }
+                                                })
+                                        }else{
+                                                this.nickstat='닉네임이 형식에 맞지않습니다'
+                                        }
+                                },
+                                pwchange(){
+                                        if(this.oldpw==''){
+                                                this.pwstat='현재 비밀번호를 입력하세요'
+                                        }else if(this.ispwok){
+                                                if(this.oldpw==this.newpw){
+                                                        this.pwstat='현재 비밀번호와 새로운 비밀번호는 같을 수 없습니다'
+                                                }else{
+                                                        $.ajax({
+                                                                url:'/user/pwchange',
+                                                                dataType:'json',
+                                                                type:'post',
+                                                                data:{pw:user.oldpw,newpw:user.newpw},
+                                                                success:(result)=>{
+                                                                        if(result.code==0){
+                                                                                user.oldpw=''
+                                                                                user.newpw=''
+                                                                                user.newpwok=''
+                                                                                user.pwstat=''
+                                                                                user.ispwok=false
+                                                                                user.ispwActive=false
+                                                                                alert('비밀번호가 변경되었습니다')
+                                                                        }else if(result.code==4){
+                                                                                user.oldpw=''
+                                                                                user.pwstat='현재 비밀번호가 일치하지 않습니다'
+                                                                                user.ispwok=false
+                                                                        }else{
+                                                                                user.oldpw=''
+                                                                                user.newpw=''
+                                                                                user.newpwok=''
+                                                                                user.pwstat=''
+                                                                                user.ispwok=false
+                                                                                user.ispwActive=false
+                                                                                alert('비밀번호가 변경되지 않았습니다')
+                                                                        }
+                                                                }
+                                                        })
+                                                }
+                                        }else{
+                                                this.pwstat='비밀번호가 형식에 맞지않습니다'
+                                        }
+                                },
+                                imgchange() {
+                                        file=this.$refs.file.files[0]
+                                        formData=new FormData()
+                                        formData.append('file',file)
+                                        $.ajax({
+                                                url:'/user/icon',
+                                                type:'post',
+                                                enctype: 'multipart/form-data',
+                                                processData: false,
+                                                contentType: false,
+                                                cache: false,
+                                                data:formData,
+                                                success:(result)=>{
+                                                        if(result.ok){
+                                                                user.img=user.src+result.file
+                                                                $('.logpic').attr('src',user.img)
+                                                        }else{
+                                                                alert('썸네일업로드에 실패했습니다')
+                                                        }
+                                                }
+                                        })
+                                },
+                                retire(){
+                                        var ok=confirm('정말 탈퇴하시겠습니까?')
+                                        if(ok){
+                                                $.ajax({
+                                                        url:'user/retire',
+                                                        type:'post',
+                                                        success:(result)=>{
+                                                                if(result){
+                                                                        alert('계정이 탈퇴되었습니다')
+                                                                        location.href='/'
+                                                                }else{
+                                                                        alert('계정이 탈퇴되지않았습니다')
+                                                                        location.href='/'
+                                                                }
+                                                        }
+                                                })
+                                        }
+                                }
+                        }
+                })
+                pic='#{user.mem_pic}'
+                oldnick='#{user.mem_nick}'
+                if(pic){
+                        user.img='../../file/usericon/'+'#{user.mem_pic}'
+                }
+                user.oldnick=oldnick
+                function checknick(nick){
+                        var pattern = /^[가-힣|a-z|A-Z|0-9|\*]+$/;
+                        if(pattern.test(nick)) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                }
+                function checkpw(pw){
+                        var pattern = /^.*(?=.)(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+                        if(pattern.test(pw)) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                }

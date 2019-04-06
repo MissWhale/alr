@@ -1,0 +1,470 @@
+$color:#3694d7;
+$timing:.3s;
+.framebody{
+        .user{
+                width:800px;
+                margin:0 auto;
+                span{
+                        font-size: 16px;
+                        width:70px;
+                        display: inline-block;
+                }
+                input{
+                        outline: 0;
+                        height: 26px;
+                        // width: 244px;
+                        margin:0px 0px 10px 20px;
+                        line-height: 35px;
+                        padding: 0 16px;
+                        background-color: rgba(255, 255, 255, 0.8);
+                        color: #212121;
+                        border: none;
+                        -webkit-border-radius: 4px;
+                        border-radius: 4px;
+                        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                }
+                .userblock{
+                        padding:30px 20px;
+                        background: rgba(38, 50, 56, 0.2);
+                        display: inline-block;
+                }
+                .usertitle{
+                        padding-bottom: 20px;
+                        border-bottom: 1px solid;
+                        font-size: 18px;
+                }
+                .thumb{
+                        width:335px;
+                        .img{
+                                width:100px;
+                                margin:30px auto;
+                                img{
+                                        width: 100px;
+                                        height:100px;
+                                        border:1px solid;
+                                }
+                        }
+                        .input{
+                                margin:0 auto;
+                                width: 260px;
+                                input{
+                                        border:1px solid gray;
+                                        border-radius: 3px;
+                                        margin:0px;
+                                        width:260px;
+                                        height: auto;
+                                        padding:0 5px;
+                                }
+                        }
+                }
+                .nick{
+                        width:335px;
+                        margin-left:60px;
+                        position: absolute;
+                        .body{
+                                margin:50px 30px 82px 30px;
+                                button{
+                                        position: absolute;
+                                        right:45px;
+                                        bottom: 30px;
+                                }
+                                label{
+                                        position: absolute;
+                                        top:190px;
+                                        left:150px;
+                                }
+                        }
+                }
+                .pwupdate{
+                        margin-top:50px;
+                        height: 216.5px;
+                        padding: 30px 20px 50px 20px;
+                        .pbody{
+                                margin:30px;
+                                input{
+                                        width:210px;
+                                }
+                                button{
+                                        float:right;
+                                        top:10px;
+                                        right:-10px;
+                                }
+                        }
+                        span{
+                                width: 130px;
+                        }
+                        label{
+                                position: relative;
+                                left: 160px;
+                        }
+                }
+                .retire{
+                        position: relative;
+                        top:-59px;
+                        left:50px;
+                        width: 220px;
+                        height: 236px;
+                        .rbody{
+                                padding:65px 30px;
+                                button{
+                                        margin:0 auto;
+                                        display: block;
+                                        padding:10px 45px;
+                                        font-size: 19px;
+                                        background:rgb(241, 51, 51);
+                                        border-right:3px solid red;
+                                        border-bottom: 5px solid red;
+                                        text-shadow: 0px -2px red;
+                                        &:active{
+                                                transform: translate(3px, 5px);
+                                                -webkit-transform: translate(3px, 5px);
+                                                border-right: 1px solid;
+                                                border-bottom: 1px solid;
+                                        }
+                                }
+                        }
+                }
+        }
+        .setting{
+                width:800px;
+                margin:0 auto;
+                label {
+                        cursor: pointer;
+                        display: inline-block;
+                }
+                .settingtitle{
+                        padding-bottom: 20px;
+                        border-bottom: 1px solid;
+                        font-size: 18px;
+                }
+                .settingblock{
+                        padding:30px 20px;
+                        background: rgba(38, 50, 56, 0.2);
+                        display: inline-block;
+                }
+                .theme{
+                        .dark,.white{
+                                display: inline-block;
+                                padding:10px;
+                                margin: 30px 10px 10px 10px;
+                                width:160px;
+                        }
+                        .dark{
+                                background:rgb(46, 46, 46);
+                                color:white;
+                                input[type="radio"]:focus + label:before,
+                                input[type="radio"]:hover + label:before {
+                                        border-color: white;
+                                }
+                        }
+                        .white{
+                                background:white;
+        
+                        }
+                        input[type="radio"] {
+                                border: 0;
+                                clip: rect(0 0 0 0);
+                                height: 1px;
+                                margin: -1px;
+                                overflow: hidden;
+                                padding: 0;
+                                position: absolute;
+                                width: 1px;
+                        }
+                        
+                        input[type="radio"]:focus + label:before,
+                        input[type="radio"]:hover + label:before {
+                                border-color: black;
+                        }
+                        
+                        input[type="radio"]:active + label:before {
+                                -webkit-transition-duration: 0;
+                                transition-duration: 0;
+                                -webkit-filter: brightness(0.2);
+                                filter: brightness(0.2);
+                        }
+                        
+                        input[type="radio"] + label {
+                                position: relative;
+                                padding: 10px;
+                                padding-left: 2em;
+                                vertical-align: middle;
+                                -webkit-user-select: none;
+                                -moz-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+                        }
+                        input[type="radio"] + label:before {
+                                box-sizing: content-box;
+                                content: '';
+                                color: #900;
+                                position: absolute;
+                                top: 50%;
+                                left: 0;
+                                width: 14px;
+                                height: 14px;
+                                margin-top: -9px;
+                                border: 2px solid grey;
+                                text-align: center;
+                        }
+                        input[type="radio"] + label:after {
+                                box-sizing: content-box;
+                                content: '';
+                                background-color: #900;
+                                position: absolute;
+                                top: 50%;
+                                left: 4px;
+                                width: 10px;
+                                height: 10px;
+                                margin-top: -5px;
+                                -webkit-transform: scale(0);
+                                transform: scale(0);
+                                -webkit-transform-origin: 50%;
+                                transform-origin: 50%;
+                                -webkit-transition: -webkit-transform 200ms ease-out;
+                                transition: -webkit-transform 200ms ease-out;
+                                transition: transform 200ms ease-out;
+                                transition: transform 200ms ease-out, -webkit-transform 200ms ease-out;
+                        }
+                        input[type="radio"]:checked + label:before {
+                                -webkit-animation: borderscale 300ms ease-in;
+                                animation: borderscale 300ms ease-in;
+                                background-color: white;
+                        }
+                        input[type="radio"]:checked + label:after {
+                                -webkit-transform: scale(1);
+                                transform: scale(1);
+                        }
+                        input[type="radio"] + label:before,
+                        input[type="radio"] + label:after {
+                                border-radius: 50%;
+                        }
+                        @-webkit-keyframes borderscale {
+                                50% {
+                                        box-shadow: 0 0 0 2px #900;
+                                }
+                        }
+                        @keyframes borderscale {
+                                50% {
+                                        box-shadow: 0 0 0 2px #900;
+                                }
+                        }
+                        // .error-msg {
+                        //         display: block;
+                        //         color: red;
+                        //         max-height: 0;
+                        //         overflow: hidden;
+                        //         -webkit-transition: max-height 500ms ease-out;
+                        //         transition: max-height 500ms ease-out;
+                        //         will-change: max-height;
+                        // }
+                        // :required:not(:focus) ~ .error-msg,
+                        // :invalid:required ~ .error-msg {
+                        //         max-height: 9em;
+                        // }
+                        input:focus {
+                                border: 1px solid black;
+                        }
+                        
+                        input:not(:focus):invalid {
+                                border: 1px solid red;
+                                outline: none;
+                        }
+                        input:not(:focus):valid {
+                                border: 1px solid green;
+                        }
+                }
+                .font{
+                        width:260px;
+                        height:248.5px;
+                        margin-left:50px;
+                        position: relative;
+                        top:-45px;
+                        .fonttype,.fontsize{
+                                margin:50px 20px;
+                                p{
+                                        width:50px;
+                                        display: inline-block;
+                                }
+                        }
+                        .fonttype{
+                                .dropdown-el{
+                                        z-index: 5;
+                                }
+                        }
+                        .sz label{
+                                padding-right:120px !important;
+                        }
+                        .dropdown-el {
+                                min-width: 12em;
+                                position: absolute;
+                                display: inline-block;
+                                margin-right: 1em;
+                                margin-top: -5px;
+                                min-height: 2em;
+                                max-height:2em;
+                                overflow:hidden;
+                                cursor: pointer;
+                                text-align: left;
+                                white-space: nowrap;
+                                color: #444;
+                                outline: none;
+                                border: .06em solid transparent;
+                                border-radius: 1em;
+                                background-color: mix($color,#fff,25%);
+                                transition: $timing all ease-in-out;  
+                                input {
+                                        display:none;
+                                }
+                                label {
+                                        border-top: .06em solid #d9d9d9;
+                                        display:block;
+                                        height: 2em;
+                                        line-height: 2em;
+                                        padding-left: 1em;
+                                        padding-right: 3em;
+                                        cursor: pointer;
+                                        position: relative;
+                                        transition: $timing color ease-in-out;  
+                                        &:nth-child(2) {
+                                        margin-top: 2em;
+                                        border-top: .06em solid #d9d9d9;
+                                        }
+                                }
+                                input:checked + label {
+                                        display:block;
+                                        border-top: none;
+                                        position: absolute;
+                                        top: 0;
+                                        &:nth-child(2) {
+                                                margin-top: 0;
+                                                position: relative;
+                                        }
+                                }
+                                &::after {
+                                        content:"";
+                                        position: absolute;
+                                        right: 0.8em;
+                                        top: 0.9em;
+                                        border: .3em solid $color;
+                                        border-color: $color transparent transparent transparent;
+                                        transition: .4s all ease-in-out;
+                                }
+                                &.expanded {
+                                        border: .06em solid $color;
+                                        background: #fff;
+                                        border-radius: .25em;
+                                        padding: 0;
+                                        box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 5px 0px;
+                                        max-height:15em;
+                                        label {
+                                                border-top: .06em solid #d9d9d9;
+                                                &:hover {
+                                                        color:$color;
+                                                }
+                                        }
+                                        input:checked + label {
+                                                color:$color;
+                                        }
+                                        &::after {
+                                                transform: rotate(-180deg);
+                                                top:.55em;
+                                        }
+                                }
+                        }
+                }
+                .ex{
+                        width:94.5%;
+                        .exarea{
+                                width:100%;
+                                margin-top:30px;
+                                textarea{
+                                        width:100%;
+                                }
+                        }
+                }
+        }
+        .order{
+                position: absolute;
+                margin:12px 0px 0px 340px;
+                .dropdown-el {
+                        min-width: 12em;
+                        position: absolute;
+                        display: inline-block;
+                        margin-right: 1em;
+                        margin-top: -5px;
+                        min-height: 2em;
+                        max-height:2em;
+                        overflow:hidden;
+                        cursor: pointer;
+                        text-align: left;
+                        white-space: nowrap;
+                        color: #444;
+                        outline: none;
+                        border: .06em solid transparent;
+                        border-radius: 1em;
+                        // background-color: mix($color,#fff,10%);
+                        border: 1px solid $color;
+                        transition: $timing all ease-in-out;  
+                        input {
+                                display:none;
+                        }
+                        label {
+                                border-top: .06em solid #d9d9d9;
+                                display:block;
+                                height: 2em;
+                                line-height: 2em;
+                                padding-left: 1em;
+                                padding-right: 3em;
+                                cursor: pointer;
+                                position: relative;
+                                transition: $timing color ease-in-out;  
+                                &:nth-child(2) {
+                                margin-top: 2em;
+                                border-top: .06em solid #d9d9d9;
+                                }
+                        }
+                        input:checked + label {
+                                display:block;
+                                border-top: none;
+                                position: absolute;
+                                top: 0;
+                                &:nth-child(2) {
+                                        margin-top: 0;
+                                        position: relative;
+                                }
+                        }
+                        &::after {
+                                content:"";
+                                position: absolute;
+                                right: 0.8em;
+                                top: 0.9em;
+                                border: .3em solid $color;
+                                border-color: $color transparent transparent transparent;
+                                transition: .4s all ease-in-out;
+                        }
+                        &.expanded {
+                                border: .06em solid $color;
+                                background: #fff;
+                                border-radius: .25em;
+                                padding: 0;
+                                box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 5px 0px;
+                                max-height:15em;
+                                label {
+                                        border-top: .06em solid #d9d9d9;
+                                        &:hover {
+                                                color:$color;
+                                        }
+                                }
+                                input:checked + label {
+                                        color:$color;
+                                }
+                                &::after {
+                                        transform: rotate(-180deg);
+                                        top:.55em;
+                                }
+                        }
+                }
+        }
+}

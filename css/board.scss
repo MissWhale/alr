@@ -1,0 +1,153 @@
+.boardwrite{
+        background: rgb(165, 164, 164);
+        padding: 20px 20px 70px 20px;
+        border-radius: 5px;
+        .title {
+                input{
+                        outline: 0;
+                        height: 35px;
+                        width: 98%;
+                        line-height: 35px;
+                        padding: 0 1%;
+                        background-color: rgba(255, 255, 255, 0.8);
+                        color: #212121;
+                        border: none;
+                        float: left;
+                        -webkit-border-radius: 4px 0 0 4px;
+                        border-radius: 4px;
+                        &:focus {
+                        outline: 0;
+                        background-color: #FFF;
+                        }
+                }
+        }
+        .body{
+                padding-top:50px;
+        }
+        .btndiv{
+                margin-top:20px;
+                button{
+                        position: absolute;
+                }
+                .write{
+                        right:130px;
+                }
+                .close{
+                        right:60px;
+                }
+        }
+}
+.posttitle{
+        font-size: 40px;
+        margin:20px 0px;
+}
+.postinfo{
+        .img{
+                display: inline;
+                img{
+                        margin-left:10px;
+                }
+        }
+}
+.postlike{
+        float:right;
+        margin-top:-35px;
+        img{
+                background: rgb(236, 236, 236);
+                float: right;
+                padding: 2px 5px;
+                border-radius: 8px;
+                margin-top: 10px;
+        }
+        span{
+                background: gray;
+                font-size: 13px;
+                padding: 5px 8px;
+                color: white;
+                display: block;
+        }
+}
+.bodybtn{
+        margin-top:10px;
+        button{
+                position: absolute;
+        }
+        .update{
+                right:180px;
+        }
+        .delete{
+                right:110px;
+        }
+        .list{
+                right:40px;
+        }
+}
+.bodypost{
+        margin-top:65px;
+        overflow: auto;
+}
+.bodycomment{
+        margin-top:20px;
+        border-top:1px solid;
+        padding-top:10px;
+        .nocom{
+                text-align: center;
+                margin:20px 0;
+        }
+        .comtitle{
+                font-size:17px;
+        }
+        .combody{
+                margin-top:10px;
+                padding: 10px;
+                min-width: 600px;
+                background: rgb(189, 189, 189);
+                .btndiv{
+                        margin-top:10px;
+                        button{
+                                position: absolute;
+                                padding:5px 10px;
+                        }
+                        .update{
+                                right:100px;
+                        }
+                        .delete{
+                                right:50px;
+                        }
+                }
+                .title{
+                        border-bottom: 1px solid;
+                        padding-bottom:10px;
+                        margin-bottom:20px;
+                        img{
+                                background: gray;
+                                border-radius: 5px;
+                                height: 30px;
+                        }
+                        span{
+                                position: relative;
+                                top: -5px;
+                                margin-left: 10px;
+                        }
+                }
+                .body{
+                        margin-bottom: 20px;
+                        overflow: auto;
+                }
+        }
+}
+.comwrite{
+        margin-top:10px;
+        margin-bottom:60px;
+        .writetitle{
+                font-size: 17px;
+        }
+        .writebody{
+                margin:10px 0px;
+        }
+        button{
+                position: absolute;
+                right:40px;
+                margin-bottom:20px;
+        }
+}

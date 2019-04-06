@@ -1,0 +1,167 @@
+include ../main.jade
+        link(rel='stylesheet',href='../../css/user.css')
+        .frame
+                .frametitle
+                        strong 내 프로젝트
+                .framebody
+                        .search.usersearch
+                                .box
+                                        input.textbox(type='text', placeholder='검색' v-vind:value='text' @input='searchinput' value=text)
+                                        input.button(title='Search', value='', type='button' @click='usersearch')
+                                .order
+                                        span.dropdown-el
+                                                input#pro_reg_desc(type='radio', name='order', value='pro_reg desc' checked='checked' v-model='order')
+                                                label(for='pro_reg_desc') 최신순
+                                                input#pro_reg(type='radio', name='order', value='pro_reg', v-model='order')
+                                                label(for='pro_reg') 생성날짜순
+                                                input#pro_cnt_desc(type='radio', name='order', value='pro_cnt desc' v-model='order')
+                                                label(for='pro_cnt_desc') 조회수높은순
+                                                input#pro_cnt(type='radio', name='order', value='pro_cnt' v-model='order')
+                                                label(for='pro_cnt') 조회수낮은순
+                                                input#pro_like_desc(type='radio', name='order', value='pro_like desc' v-model='order')
+                                                label(for='pro_like_desc') 좋아요높은순
+                                                input#pro_like(type='radio', name='order', value='pro_like' v-model='order')
+                                                label(for='pro_like') 좋아요낮은순
+                        .projectlist
+                                if(!list.length)
+                                        .none
+                                                span 게시물이 없습니다         
+                                mixin list(title,view,com,like)
+                                        .top
+                                                span=title
+                                        .middle
+                                        .bottom
+                                                .bottom_in
+                                                        .view
+                                                                img(src='../../img/view.png')
+                                                                span=view
+                                                        .comment
+                                                                img(src='../../img/comment.png')
+                                                                span=com
+                                                        .like
+                                                                img(src='../../img/like.png')
+                                                                span=like
+                                each pro,i in list
+                                        -if(i%3==0){
+                                                | <div class='other'>
+                                                .content
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                if(list.length==i+1)
+                                                        |</div>
+                                        -}else if(i%3==2){
+                                                .content
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                |</div>
+                                        -}else{
+                                                .content
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                if(list.length==i+1)
+                                                        |</div>
+                                        -}
+                .paging
+                        -var pover=Math.trunc(pager.pagecount/10)
+                        if(!email)
+                                -var emaild=''
+                        if(pover)
+                                if(pno<11)
+                                - var n = 1 //시작페이지
+                                - var max=10 //끝페이지
+                                - var next=11 //다음10페이지
+                                if(pager.pagecount%10!=0)
+                                        - var check=1 //다음,마지막페이지 체크
+                                else
+                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                - var fp=Math.trunc(pager.pagecount/10) //마지막페이지앞자리
+                                -var pna=pager.pagecount-n //잔여페이지수
+                                -var next=(ip+1)*10+1 //다음10페이지
+                                -var prev=ip*10 //전10페이지
+                                if(ip == fp)
+                                        -var max=n+pna
+                                else
+                                        -var max=n+9
+                        else
+                                - var n = 1
+                                - var max=pager.pagecount
+                        //- -console.log("시작"+pover);
+                        //- -console.log("시작"+n);
+                        //- -console.log("맥스"+max);
+                        //- -console.log("시작페이지앞자리"+ip);
+                        //- -console.log("마지막페이지앞자리"+fp);
+                        //- -console.log("다음,마지막페이지 체크"+check);
+                        span
+                                ul
+                                        if(pno>10)
+                                                li
+                                                        a#first(href="/user/project?page=1"+'&text='+text+'&type=#{type}' style="height: 14px;")
+                                                                img(src="../img/dback_black.png")
+                                        if(prev)
+                                                li
+                                                        a#prev(href="/user/project?page="+prev+'&text='+text+'&type=#{type}' style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                img(src="../img/back_black.png")
+                                        while n <= max
+                                                li
+                                                        if(pno==n)
+                                                                a(href="/user/project?page="+n+'&text='+text+'&type=#{type}' style="color: #fff;border: 1px solid rgb(0, 153, 255);background-color: rgb(0, 153, 255);")=n++
+                                                        else
+                                                                a(href="/user/project?page="+n+'&text='+text+'&type=#{type}')=n++
+                                        if((ip != fp && pager.pagecount > max)|| pager.pagecount>max)
+                                                li
+                                                        a#next(href="/user/project?page="+next+'&text='+text+'&type=#{type}' style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                img(src="../img/forward_black.png")
+                                                li
+                                                        a#final(href="/user/project?page="+pager.pagecount+'&text='+text+'&type=#{type}' style="height: 14px;")
+                                                                img(src="../img/dforward_black.png")
+
+        script.
+                var text='#{text}'
+                var pno='#{pno}'
+                var type='#{type}'
+                if(!type){
+                        type='pro_reg'
+                }
+                var search=new Vue({
+                        el:'.usersearch',
+                        data:{
+                                order:type,
+                                text:text
+                        },
+                        methods:{
+                                searchinput(e){
+                                        this.text = e.target.value
+                                },
+                                usersearch(e){
+                                        location.href='/user/project?page='+pno+'&text='+this.text+'&type='+this.order+'&search=true'
+                                }
+                        }
+                })
+                $('.dropdown-el').click(function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(this).toggleClass('expanded');
+                        $('#'+$(e.target).attr('for')).prop('checked',true);
+                        search.order=$('#'+$(e.target).attr('for')).val()
+                });
+                $(document).click(function() {
+                        $('.dropdown-el').removeClass('expanded');
+                });
+                $("#first").hover(function(){
+                        $("#first").children().attr('src','../img/dback_white.png');
+                },function(){
+                        $("#first").children().attr('src','../img/dback_black.png');
+                })
+                $("#prev").hover(function(){
+                        $("#prev").children().attr('src','../img/back_white.png');
+                },function(){
+                        $("#prev").children().attr('src','../img/back_black.png');
+                })
+                $("#next").hover(function(){
+                        $("#next").children().attr('src','../img/forward_white.png');
+                },function(){
+                        $("#next").children().attr('src','../img/forward_black.png');
+                })
+                $("#final").hover(function(){
+                        $("#final").children().attr('src','../img/dforward_white.png');
+                },function(){
+                        $("#final").children().attr('src','../img/dforward_black.png');
+                })

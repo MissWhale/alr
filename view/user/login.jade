@@ -1,0 +1,119 @@
+include ../main.jade
+        link(rel='stylesheet',href='../css/login.css')
+        .login
+            .logintitle
+                img(src='../../img/logo.png')
+                strong 로그인!!
+            .loginbody
+                .login_input#login_data
+                    .input_line
+                        .imgbox
+                            img(src='../../img/mail.png')
+                        label#label1 이메일
+                        input.textbox(type='text' v-model='email' ref='emailinput')
+                    .input_line
+                        .imgbox
+                            img(src='../../img/pw.png')
+                        label#label2 비밀번호
+                        input.textbox#pw(type='password' v-model='pw' ref='pwinput')
+                .login_btn
+                    button.btn.first#login 로그인
+                    a 비밀번호를 잊으셨습니까?
+                    .pwfind
+                        strong 비밀번호찾기
+                        input.textbox(type='text' placeholder="이메일을 적으세요" v-model='pwfind')
+                        .pw_btn
+                            button.btn#pwfind 비밀번호 전송
+                .regi_btn
+                    button.btn(onclick='location.href="/login/register"') 회원가입
+        script.
+                var vue_data=new Vue({
+                        el:'#login_data',
+                        data:{
+                                email:'',
+                                pw:'',
+                                isemailActive:'',
+                                ispwActive:''
+                        }
+                })
+                var vue_find=new Vue({
+                        el:'.pwfind',
+                        data:{
+                                pwfind:''
+                        }
+                })
+                $('#pwfind').click(function(){
+                        $.ajax({
+                                url:'/login/pwfind',
+                                dataType:'json',
+                                type:'post',
+                                data:{email:vue_find.pwfind},
+                                success:function(result){
+                                        if(result.ok){
+                                                alert('이메일로 임시 비밀번호를 전송하였습니다\n임시 비밀번호로 접속하세요')
+                                                $('.pwfind').toggleClass('active')
+                                        }else if(result.code==1){
+                                                alert('일치하는 이메일이 없습니다')
+                                                vue_find.pwfind=''
+                                        }else if(result.code>1){
+                                                alert('오류 발생')
+                                                vue_find.pwfind=''
+                                        }
+                                }
+                        })
+                })
+                $('#pw').keyup(function(e){ 
+                        if(e.keyCode==13){
+                               login()
+                        }
+                })
+                $('#login').click(function(){
+                        login()
+                })
+                $('.login_btn a').click(function(){
+                        $('.pwfind').toggleClass('active')
+                })
+                $('.input_line').find('input').on('keyup blur focus', function (e) {
+                    var $this = $(this),
+                    label=$this.prev('label');
+                    if (e.type === 'keyup') {
+                            if( $this.val() === '' ) {
+                                    label.removeClass('active highlight'); 
+                            } else {
+                                    label.addClass('active');   
+                            }  
+                    } else if (e.type === 'blur') {
+                            if( $this.val() === '' ) {
+                                    label.removeClass('active highlight'); 
+                            } else {
+                                    label.removeClass('highlight');   
+                            }   
+                    } else if (e.type === 'focus') {
+                            if( $this.val() === '' ) {
+                                    label.removeClass('highlight'); 
+                            } 
+                            else if( $this.val() !== '' ) {
+                                    label.addClass('highlight');
+                            }
+                    }
+                });
+                function login(){
+                        $.ajax({
+                                url: '/login',           
+                                dataType: 'json',                  
+                                type: 'POST',                      
+                                data: {email:vue_data.email,pw:vue_data.pw},      
+                                success: function(result) {
+                                        if(result){
+                                                alert('로그인 성공')
+                                                location.href='/'
+                                        }else{
+                                                vue_data.email=''
+                                                vue_data.pw=''
+                                                $('#label1').removeClass('active')
+                                                $('#label2').removeClass('active')
+                                                alert('이메일이나 비밀번호가 일치하지않습니다')
+                                        }
+                                }
+                        })
+                }

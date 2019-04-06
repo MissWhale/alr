@@ -1,0 +1,148 @@
+.boardwrite {
+  background: #a5a4a4;
+  padding: 20px 20px 70px 20px;
+  border-radius: 5px; }
+
+.boardwrite .title input {
+  outline: 0;
+  height: 35px;
+  width: 98%;
+  line-height: 35px;
+  padding: 0 1%;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #212121;
+  border: none;
+  float: left;
+  -webkit-border-radius: 4px 0 0 4px;
+  border-radius: 4px; }
+
+.boardwrite .title input:focus {
+  outline: 0;
+  background-color: #FFF; }
+
+.boardwrite .body {
+  padding-top: 50px; }
+
+.boardwrite .btndiv {
+  margin-top: 20px; }
+
+.boardwrite .btndiv button {
+  position: absolute; }
+
+.boardwrite .btndiv .write {
+  right: 130px; }
+
+.boardwrite .btndiv .close {
+  right: 60px; }
+
+.posttitle {
+  font-size: 40px;
+  margin: 20px 0px; }
+
+.postinfo .img {
+  display: inline; }
+
+.postinfo .img img {
+  margin-left: 10px; }
+
+.postlike {
+  float: right;
+  margin-top: -35px; }
+
+.postlike img {
+  background: #ececec;
+  float: right;
+  padding: 2px 5px;
+  border-radius: 8px;
+  margin-top: 10px; }
+
+.postlike span {
+  background: gray;
+  font-size: 13px;
+  padding: 5px 8px;
+  color: white;
+  display: block; }
+
+.bodybtn {
+  margin-top: 10px; }
+
+.bodybtn button {
+  position: absolute; }
+
+.bodybtn .update {
+  right: 180px; }
+
+.bodybtn .delete {
+  right: 110px; }
+
+.bodybtn .list {
+  right: 40px; }
+
+.bodypost {
+  margin-top: 65px;
+  overflow: auto; }
+
+.bodycomment {
+  margin-top: 20px;
+  border-top: 1px solid;
+  padding-top: 10px; }
+
+.bodycomment .nocom {
+  text-align: center;
+  margin: 20px 0; }
+
+.bodycomment .comtitle {
+  font-size: 17px; }
+
+.bodycomment .combody {
+  margin-top: 10px;
+  padding: 10px;
+  min-width: 600px;
+  background: #bdbdbd; }
+
+.bodycomment .combody .btndiv {
+  margin-top: 10px; }
+
+.bodycomment .combody .btndiv button {
+  position: absolute;
+  padding: 5px 10px; }
+
+.bodycomment .combody .btndiv .update {
+  right: 100px; }
+
+.bodycomment .combody .btndiv .delete {
+  right: 50px; }
+
+.bodycomment .combody .title {
+  border-bottom: 1px solid;
+  padding-bottom: 10px;
+  margin-bottom: 20px; }
+
+.bodycomment .combody .title img {
+  background: gray;
+  border-radius: 5px;
+  height: 30px; }
+
+.bodycomment .combody .title span {
+  position: relative;
+  top: -5px;
+  margin-left: 10px; }
+
+.bodycomment .combody .body {
+  margin-bottom: 20px;
+  overflow: auto; }
+
+.comwrite {
+  margin-top: 10px;
+  margin-bottom: 60px; }
+
+.comwrite .writetitle {
+  font-size: 17px; }
+
+.comwrite .writebody {
+  margin: 10px 0px; }
+
+.comwrite button {
+  position: absolute;
+  right: 40px;
+  margin-bottom: 20px; }

@@ -1,0 +1,33 @@
+.workframe{
+        #container {
+                width: 100%;
+                height: 800px;
+                margin: 0 auto;
+                position: relative;
+        }
+        #A, #B, #Z {
+                position: absolute;
+                top: 0;
+                height: 100%;
+        }
+        #A {
+                left: 0;
+                width: 39%;
+                background-color: #ccffcc;
+                overflow:auto;
+                .div1,.div2,.div3 {position:relative; top:0; width:100%; height:calc(calc( 100% - 60px ) / 3);overflow:auto;}
+                #middle,#middle1 {cursor:pointer;height: 30px;background: #333641;}
+        }
+        #B {
+                right: 0;
+                width: 59%;
+                background-color: #ccccff;
+                overflow:auto;
+        }
+        #Z {
+                left: 39%;
+                width: 2%;
+                background-color: #cc0000;
+                cursor: move;
+        }    
+}
