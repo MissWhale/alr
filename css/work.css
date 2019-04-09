@@ -30,11 +30,23 @@
 .workframe #B {
   right: 0;
   width: 59%;
-  background-color: #ccccff;
-  overflow: auto; }
+  background-color: #ccccff; }
 
-.workframe #Z {
+.workframe #B #Z {
   left: 39%;
   width: 2%;
   background-color: #cc0000;
   cursor: move; }
+
+.workframe .gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%; }
+
+.workframe .gutter.gutter-horizontal {
+  background-image: url("grips/vertical.png");
+  cursor: col-resize; }
+
+.workframe .gutter.gutter-vertical {
+  background-image: url("grips/horizontal.png");
+  cursor: row-resize; }
