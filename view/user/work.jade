@@ -1,96 +1,192 @@
 include ../main.jade
         link(rel='stylesheet',href='../css/work.css')
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
-        .workframe
-                #container
-                        #A
-                                #top.div1 TOP DIV
-                                #middle
-                                #bottom.div2 BOTTOM DIV
-                                #middle1
-                                #bottom1.div3 BOTTOM2 DIV
-                        #B
-                        #Z
+        //- link(rel='stylesheet', href='../css/jqx.base.css', type='text/css')
+        //- link(rel='stylesheet', href='../css/jqx.light.css', type='text/css')
+        //- link(rel='stylesheet', href='../css/demos.css', type='text/css')
+        //- script(src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+
+        //- script(type='text/javascript', src='../../js/splitter/webcomponents-lite.min.js')
+        //- script(type='text/javascript', src='../../js/splitter/jqxcore.js')
+        //- script(type='text/javascript', src='../../js/splitter/jqxcore.elements.js')
+        //- script(type='text/javascript', src='../../js/splitter/jqxsplitter.js')
+        //- script(type='text/javascript', src='../../js/splitter/demos.js')
+
+        script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.9/split.min.js')
+        .workframe(style='height:300px')
+                .newdiv(style='float:left;height:100%')
+                        #one
+                                | panel 1
+                        #two
+                                | panel 2
+                        #three
+                                | panel 3
+                .newdiv2(style='float:left;height:100%')
+                        | panel 4
+                //- #mainSplitter
+                //-         //- div
+                //-         //-         #firstNested
+                //-         //-                 div
+                //-         //-                         #secondNested
+                //-         //-                                 div
+                //-         //-                                         span Panel 1
+                //-         //-                                 div
+                //-         //-                                         span Panel 2
+                //-         //-                 div
+                //-         //-                         span Panel 3
+                //-         div
+                //-                 #first
+                //-                         div
+                //-                                 span Panel 1
+                //-                         div
+                //-                                 #second
+                //-                                         div
+                //-                                                 span Panel 2
+                //-                                         div
+                //-                                                 span Panel 3
+
+
+                //- #container
+                //-         #A
+                //-                 #top.div1 TOP DIV
+                //-                 #middle
+                //-                 #bottom.div2 BOTTOM DIV
+                //-                 #middle1
+                //-                 #bottom1.div3 BOTTOM2 DIV
+                //-         #B
+                //-         #Z
         script.
-                var height=$('#top').height()
-                var height1=$('#bottom').height()
-                var startpos, diffpos=0, eControl = false;
-                var startpos1, diffpos1=0, eControl1 = false;
-                $(function(){
-                        var A = parseInt($('#A').width(), 10),
-                        B = parseInt($('#B').width(), 10),
-                        Z = parseInt($('#Z').width(), 10),
-                        minw =0,
-                        offset = $('#container').offset(),
-                        splitter = function(event, ui){
-                                var aw = parseInt(ui.position.left),
-                                bw = A + B - aw;
-                                $('#A').css({width : aw})
-                                $('#B').css({width : bw})
-                        };
-                        $('#Z').draggable({
-                                axis : 'x',
-                                containment : [
-                                offset.left + minw,
-                                offset.top,
-                                offset.left + A + B - minw,
-                                offset.top + $('#container').height()
-                                ],
-                                drag : splitter
-                        });
-                });
-                $('#middle').mousedown((e)=>{
-                        startpos = e.screenY + diffpos;
-                        eControl = true;
-                        return false;
+                Split(['.newdiv', '.newdiv2'], {
+                        //- direction: 'horizontal',
+                        sizes:[45,45],
+                        minSize: [30, 30],
+                        gutter: function (index, direction) {
+                                var gutter = document.createElement('div')
+                                gutter.className = 'gutter gutter-' + direction
+                                gutter.style.height = '139px'
+                                gutter.style.float='left'
+                                return gutter
+                        },
+                        gutterSize: 2,
                 })
-                $('#middle1').mousedown((e)=>{
-                        startpos1 = e.screenY + diffpos1;
-                        eControl1 = true;
-                        return false;
+                Split(['#one', '#two','#three'], {
+                        direction: 'vertical',
+                        sizes:[30,30,30],
+                        minSize: [0, 0, 0],
+                        snapOffset: 0,
+                        gutter: function (index, direction) {
+                                var gutter = document.createElement('div')
+                                gutter.className = 'gutter gutter-' + direction
+                                gutter.style.height = '139px'
+                                return gutter
+                        },
+                        gutterSize: 20,
                 })
-                $(document.body).mouseup((e)=>{
-                        eControl = false;
-                        eControl1 = false;
-                        height=$('#top').height()
-                        height1=$('#bottom').height()
-                })
-                $(document.body).mousemove((e)=>{
-                        if (eControl) {
-                                pos = e.screenY;
-                                diffpos = startpos-pos;
-                                //- console.log(diffpos)
-                                //- console.log(height)
-                                //- console.log(height - diffpos)
-                                if (diffpos >= -height && diffpos <= height) {
-                                        $('#top').css({height:height - diffpos})
-                                        $('#bottom').css({height:height + diffpos})
-                                }
-                                else if(diffpos>=height){
-                                        $('#top').css({height:0})
-                                        $('#bottom').css({height:height*2})
-                                }else if(diffpos<=-height){
-                                        $('#top').css({height:height*2})
-                                        $('#bottom').css({height:0})
-                                }
-                        }else if (eControl1) {
-                                pos = e.screenY;
-                                diffpos1 = startpos1-pos;
-                                console.log(diffpos1)
-                                console.log(height1)
-                                console.log(height1 - diffpos1)
-                                if (diffpos1 >= -height1 && diffpos1 <= height1) {
-                                        $('#bottom').css({height:height1 - diffpos1})
-                                        $('#bottom1').css({height:height1 + diffpos1})
-                                }
-                                else if(diffpos1>=height1){
-                                        console.log(3)
-                                        $('#bottom').css({height:0})
-                                        $('#bottom1').css({height:height1*2})
-                                }else if(diffpos1<=-height1){
-                                        console.log(4)
-                                        $('#bottom').css({height:height1*2})
-                                        $('#bottom1').css({height:0})
-                                }
-                        }
-                })
+                //- $(document).ready(function () {
+                //-         //- $('#mainSplitter').jqxSplitter({ width: 850, height: 850, orientation: 'horizontal', panels: [{ size: 300, collapsible: false }] });
+                //-         //- $('#firstNested').jqxSplitter({ width: '100%', height: '100%',  orientation: 'vertical', panels: [{ size: 300, collapsible: false}] });
+                //-         //- $('#secondNested').jqxSplitter({ width: '100%', height: '100%',  orientation: 'horizontal', panels: [{ size: 150}] });
+                //-         //- $('#thirdNested').jqxSplitter({ width: '100%', height: '100%',  orientation: 'horizontal', panels: [{ size: 150, collapsible: false}] });
+                //-         $('#first').jqxSplitter({ width: '850', height: '700',  orientation: 'horizontal', panels: [{ size: 350,collapsible:false},{min:"1%"}] });
+                //-         $('#second').jqxSplitter({ width: '100%', height: '100%',  orientation: 'horizontal', panels: [{ size: 175}] });
+                //- });
+
+
+
+                //- JQXElements.settings['splitter1Settings'] =
+                //- {
+                //-         orientation: 'horizontal', height: 600, panels: [{ size: 300, collapsible: false }]  
+                //- };    
+                //- JQXElements.settings['splitter2Settings'] =
+                //- {
+                //-         orientation: 'vertical', panels: [{ size: 300, collapsible: false }]
+                //- };
+                //- JQXElements.settings['splitter3Settings'] =
+                //- {
+                //-         orientation: 'horizontal', panels: [{ size: 150 }]
+                //- };
+                //- JQXElements.settings['splitter4Settings'] =
+                //- {
+                //-         orientation: 'horizontal', panels: [{ size: 150, collapsible: false }] 
+                //- };
+                //- var height=$('#top').height()
+                //- var height1=$('#bottom').height()
+                //- var startpos, diffpos=0, eControl = false;
+                //- var startpos1, diffpos1=0, eControl1 = false;
+                //- $(function(){
+                //-         var A = parseInt($('#A').width(), 10),
+                //-         B = parseInt($('#B').width(), 10),
+                //-         Z = parseInt($('#Z').width(), 10),
+                //-         minw =0,
+                //-         offset = $('#container').offset(),
+                //-         splitter = function(event, ui){
+                //-                 var aw = parseInt(ui.position.left),
+                //-                 bw = A + B - aw;
+                //-                 $('#A').css({width : aw})
+                //-                 $('#B').css({width : bw})
+                //-         };
+                //-         $('#Z').draggable({
+                //-                 axis : 'x',
+                //-                 containment : [
+                //-                 offset.left + minw,
+                //-                 offset.top,
+                //-                 offset.left + A + B - minw,
+                //-                 offset.top + $('#container').height()
+                //-                 ],
+                //-                 drag : splitter
+                //-         });
+                //- });
+                //- $('#middle').mousedown((e)=>{
+                //-         startpos = e.screenY + diffpos;
+                //-         eControl = true;
+                //-         return false;
+                //- })
+                //- $('#middle1').mousedown((e)=>{
+                //-         startpos1 = e.screenY + diffpos1;
+                //-         eControl1 = true;
+                //-         return false;
+                //- })
+                //- $(document.body).mouseup((e)=>{
+                //-         eControl = false;
+                //-         eControl1 = false;
+                //-         height=$('#top').height()
+                //-         height1=$('#bottom').height()
+                //- })
+                //- $(document.body).mousemove((e)=>{
+                //-         if (eControl) {
+                //-                 pos = e.screenY;
+                //-                 diffpos = startpos-pos;
+                //-                 //- console.log(diffpos)
+                //-                 //- console.log(height)
+                //-                 //- console.log(height - diffpos)
+                //-                 if (diffpos >= -height && diffpos <= height) {
+                //-                         $('#top').css({height:height - diffpos})
+                //-                         $('#bottom').css({height:height + diffpos})
+                //-                 }
+                //-                 else if(diffpos>=height){
+                //-                         $('#top').css({height:0})
+                //-                         $('#bottom').css({height:height*2})
+                //-                 }else if(diffpos<=-height){
+                //-                         $('#top').css({height:height*2})
+                //-                         $('#bottom').css({height:0})
+                //-                 }
+                //-         }else if (eControl1) {
+                //-                 pos = e.screenY;
+                //-                 diffpos1 = startpos1-pos;
+                //-                 console.log(diffpos1)
+                //-                 console.log(height1)
+                //-                 console.log(height1 - diffpos1)
+                //-                 if (diffpos1 >= -height1 && diffpos1 <= height1) {
+                //-                         $('#bottom').css({height:height1 - diffpos1})
+                //-                         $('#bottom1').css({height:height1 + diffpos1})
+                //-                 }
+                //-                 else if(diffpos1>=height1){
+                //-                         console.log(3)
+                //-                         $('#bottom').css({height:0})
+                //-                         $('#bottom1').css({height:height1*2})
+                //-                 }else if(diffpos1<=-height1){
+                //-                         console.log(4)
+                //-                         $('#bottom').css({height:height1*2})
+                //-                         $('#bottom1').css({height:0})
+                //-                 }
+                //-         }
+                //- })

@@ -123,7 +123,7 @@ include ../main.jade
                 })
                 $('.exarea').children().css('font-size',size)
                 $('.exarea').children().css('font-family',font)
-                $('.dropdown-el').click(function(e) {
+                $('.dropdown-el').click((e)=>{
                         e.preventDefault();
                         e.stopPropagation();
                         $(this).toggleClass('expanded');
@@ -136,6 +136,6 @@ include ../main.jade
                                 setting.font=$('#'+$(e.target).attr('for')).val()
                         }
                 });
-                $(document).click(function() {
+                $(document).click(()=>{
                         $('.dropdown-el').removeClass('expanded');
                 });
