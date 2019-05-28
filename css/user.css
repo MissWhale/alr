@@ -311,6 +311,7 @@
   display: block;
   border-top: none;
   position: absolute;
+  width: calc(100% - 10px);
   top: 0; }
 
 .framebody .setting .font .dropdown-el input:checked + label:nth-child(2) {

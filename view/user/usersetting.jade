@@ -126,7 +126,11 @@ include ../main.jade
                 $('.dropdown-el').click((e)=>{
                         e.preventDefault();
                         e.stopPropagation();
-                        $(this).toggleClass('expanded');
+                        if(e.target.localNam=='span'){
+                                $(e.target).toggleClass('expanded');
+                        }else{
+                                $(e.target).parent().toggleClass('expanded');
+                        }
                         if($(e.target).attr('for')){
                                 $('#'+$(e.target).attr('for')).prop('checked',true);
                         }

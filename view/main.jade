@@ -26,10 +26,13 @@ html
                                 li(onclick='location.href="/notice"')
                                         img(src='../img/notice.png')
                                         span 공지사항
-                                
-                .search
-                        input.textbox(type='text', placeholder='검색')
-                        input.button(title='Search', value='', type='button')
+                .project_top
+                        .project_title
+                                span
+                        .project_version
+                                span
+                        .project_writer
+                                span
                 if(log)
                         .imgdiv
                                 -var pic=user.mem_pic
@@ -47,56 +50,134 @@ html
                                                         span 설정
                                                 li(onclick='location.href="/login/logout"')
                                                         span 로그아웃
-                        //- button.btn(onclick='location.href="/login/logout"') 로그아웃
                 else
                         button.btn(onclick='location.href="/login"') 로그인
+                if(work != 1)
+                        .search
+                                input.textbox(type='text', placeholder='검색')
+                                input.button(title='Search', value='', type='button')
+                else
+                        .workbtn
+                                if(log)
+                                        button.allbtn#question 질문
+                                                img(src='../img/question.png')
+                                        button.allbtn#version_select.vsd 버전
+                                                img(src='../img/version.png')
+                                        button.allbtn#save_project.savelayer 저장
+                                                img(src='../img/save.png')
+                                button.allbtn.wsd#setting_project 설정
+                                        img(src='../img/worksetting.png')
+                        .version_setting.vsd
+                                .title.vsd
+                                        p 버전선택
+                                span.dropdown-el.savelayer.vsd.vel
+                                        template(v-for='vers in ver')
+                                                input(:id='vers.ver_no' type='radio', :value='vers.ver_no', :data-pv='vers.pv_no' ,:data-text='vers.ver_text' v-model='version_dl')
+                                                label(:for='vers.ver_no') {{vers.ver_no}}
+                                .title.vsd(style='margin-top:50px;')
+                                        p 버전설명
+                                .vertext.ck
+                                        span(v-html='ver_text')
+                                .btndiv.vsd
+                                        button.allbtn(@click='get_ver' style='padding:10px 11px') 불러오기
+                                        button.allbtn(@click='ver_close') 취소
+                                
+                        .worksetting.wsd
+                                p 테마
+                                .themediv.wsd
+                                        .dark.wsd
+                                                ul.wsd
+                                                        li.wsd
+                                                                input#radio1(name='radio', type='radio' value='ace/theme/tomorrow_night' v-model='theme')
+                                                                label(for='radio1') Tomorrow Night
+                                                        li.wsd
+                                                                input#radio2(name='radio', type='radio' value='ace/theme/dracula' v-model='theme')
+                                                                label(for='radio2') Dracula
+                                                        li.wsd
+                                                                input#radio3(name='radio', type='radio' value='ace/theme/ambiance' v-model='theme')
+                                                                label(for='radio3') Ambiance
+                                                        li.wsd
+                                                                input#radio4(name='radio', type='radio' value='ace/theme/monokai' v-model='theme')
+                                                                label(for='radio4') Monokai
+                                        .white.wsd
+                                                ul.wsd
+                                                        li.wsd
+                                                                input#radio5(name='radio', type='radio' value='ace/theme/chrome' v-model='theme')
+                                                                label(for='radio5') Chrome
+                                                        li.wsd
+                                                                input#radio6(name='radio', type='radio' value='ace/theme/dreamweaver' v-model='theme')
+                                                                label(for='radio6') Dreamweaver
+                                                        li.wsd
+                                                                input#radio7(name='radio', type='radio' value='ace/theme/eclipse' v-model='theme')
+                                                                label(for='radio7') Eclipse
+                                                        li.wsd
+                                                                input#radio8(name='radio', type='radio' value='ace/theme/xcode' v-model='theme')
+                                                                label(for='radio8') XCode
+                                p 폰트
+                                .fontdiv.wsd
+                                        .fonttype.wsd
+                                                span 글씨체
+                                                span.dropdown-el.dl.wsd
+                                                        input#nanumgothic(type='radio', name='font', value='Nanum Gothic', checked='checked' v-model='font')
+                                                        label(for='nanumgothic') 나눔고딕
+                                                        input#hack(type='radio', name='font', value='Hack' v-model='font')
+                                                        label(for='hack') Hack
+                                                        input#d2coding(type='radio', name='font', value='D2 coding' v-model='font')
+                                                        label(for='d2coding') D2 coding
+                                                        input#sourcecodepro(type='radio', name='font', value='Source Code Pro' v-model='font')
+                                                        label(for='sourcecodepro') Source Code Pro
+                                                        input#consolas(type='radio', name='font', value='Consolas' v-model='font')
+                                                        label(for='consolas') Consolas
+                                        .fontsize.wsd
+                                                span 글씨크기
+                                                span.dropdown-el.dl.sz.wsd(style='z-index:2;')
+                                                        input#10px(type='radio', name='size', value='10px', checked='checked' v-model='size')
+                                                        label.sz(for='10px') 10px
+                                                        input#12px(type='radio', name='size', value='12px' v-model='size')
+                                                        label.sz(for='12px') 12px
+                                                        input#14px(type='radio', name='size', value='14px' v-model='size')
+                                                        label.sz(for='14px') 14px
+                                                        input#16px(type='radio', name='size', value='16px' v-model='size')
+                                                        label.sz(for='16px') 16px
+                                                        input#18px(type='radio', name='size', value='18px' v-model='size')
+                                                        label.sz(for='18px') 18px
+                                                        input#20px(type='radio', name='size', value='20px' v-model='size')
+                                                        label.sz(for='20px') 20px
+                                if(log)
+                                        .btndiv.wsd
+                                                button.allbtn(@click='usersetting') 유저설정
+                                                button.allbtn(@click='savesetting') 설정저장
                 
             .divmain
                 a(style='display:none')
         script.
+                //- import VueSplit from 'vue-split-panel'
                 $('.imgdiv').click(function(){
-                        $(this).children().eq(1).toggle('fast')
+                        $(this).children().eq(1).fadeIn()
                 })
                 $(document).click(function(e){
                         var target=e.target
                         if(!$(target).is('.imgdiv') && !$(target).parent().is('.imgdiv') && $('.userbar').css('display')=='block'){
-                                //- console.log($(target).parent().parent().parent().parent())
-                                //- console.log($(target).parent().parent().is('.user'))
-                                //- console.log($(target).parent().is('.user'))
-                                //- console.log(!($(target).parent().is('.user') || $(target).parent().parent().is('.user')))
-                                //- if(!($(target).parent().is('.user') || $(target).parent().parent().is('.user'))){
-                                        $('.userbar').toggle('fast')
-                                //- }
+                                $('.userbar').fadeOut()
                         }
+                        if(!$(target).hasClass('wsd') && !$(target).parent().hasClass('wsd')){
+                                $('.worksetting').fadeOut()
+                        }
+                        if(!$(target).hasClass('vsd') && !$(target).parent().hasClass('vsd')){
+                                $('.version_setting').fadeOut()
+                        }
+                        $('.dropdown-el').removeClass('expanded');
                 })
-                //- $( document ).ready( function() {
-                //-         var jbOffset = $( '.divtop' ).offset();
-                //-         $( window ).scroll( function() {
-                //-                 if ( $( document ).scrollTop() > jbOffset.top ) {
-                //-                         $( '.divtop' ).addClass( 'examfix' );
-                //-                         $( '.divmain' ).addClass( 'pagefix' );
-                //-                 }
-                //-                 else {
-                //-                         $( '.divtop' ).removeClass( 'examfix' );
-                //-                         $( '.divmain' ).removeClass( 'pagefix' );
-                //-                 }
-                //-         });
-                //- });
                 $('#menu').hover(()=>{
-                        //- $('#bar').css('display','block')
                         $('#bar').toggle()
                 },()=>{
-                        //- $('#bar').css('display','none')
+
                         $('#bar').toggle()
                 })
                 $('#bar').hover(()=>{
-                        //- $('#bar').css('display','block')
                         $('#bar').toggle()
                         $('#menu').addClass('active')
-                        //- $('#menu').toggle()
                 },()=>{
-                        //- $('#bar').css('display','none')
                         $('#bar').toggle()
                         $('#menu').removeClass('active')
-                        //- $('#menu').toggle()
                 })

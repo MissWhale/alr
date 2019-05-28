@@ -1,192 +1,607 @@
 include ../main.jade
         link(rel='stylesheet',href='../css/work.css')
-        //- link(rel='stylesheet', href='../css/jqx.base.css', type='text/css')
-        //- link(rel='stylesheet', href='../css/jqx.light.css', type='text/css')
-        //- link(rel='stylesheet', href='../css/demos.css', type='text/css')
-        //- script(src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
-
-        //- script(type='text/javascript', src='../../js/splitter/webcomponents-lite.min.js')
-        //- script(type='text/javascript', src='../../js/splitter/jqxcore.js')
-        //- script(type='text/javascript', src='../../js/splitter/jqxcore.elements.js')
-        //- script(type='text/javascript', src='../../js/splitter/jqxsplitter.js')
-        //- script(type='text/javascript', src='../../js/splitter/demos.js')
-
         script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.9/split.min.js')
-        .workframe(style='height:300px')
-                .newdiv(style='float:left;height:100%')
-                        #one
-                                | panel 1
-                        #two
-                                | panel 2
-                        #three
-                                | panel 3
-                .newdiv2(style='float:left;height:100%')
-                        | panel 4
-                //- #mainSplitter
-                //-         //- div
-                //-         //-         #firstNested
-                //-         //-                 div
-                //-         //-                         #secondNested
-                //-         //-                                 div
-                //-         //-                                         span Panel 1
-                //-         //-                                 div
-                //-         //-                                         span Panel 2
-                //-         //-                 div
-                //-         //-                         span Panel 3
-                //-         div
-                //-                 #first
-                //-                         div
-                //-                                 span Panel 1
-                //-                         div
-                //-                                 #second
-                //-                                         div
-                //-                                                 span Panel 2
-                //-                                         div
-                //-                                                 span Panel 3
-
-
-                //- #container
-                //-         #A
-                //-                 #top.div1 TOP DIV
-                //-                 #middle
-                //-                 #bottom.div2 BOTTOM DIV
-                //-                 #middle1
-                //-                 #bottom1.div3 BOTTOM2 DIV
-                //-         #B
-                //-         #Z
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js")
+        scirpt(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ext-language_tools.js")
+        //- script(src='../js/ace-editor-vue-component.js')
+        script(src='../../js/ckeditor_basic/ckeditor.js')
+        script(src='../../js/html2canvas.js')
+        link(rel='stylesheet', href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css')
+        link(rel='stylesheet', href='//cdn.jsdelivr.net/npm/nanum-gothic-coding@4.0.0/nanum-gothic-coding.min.css')
+        link(rel='stylesheet', href='http://cdn.jsdelivr.net/gh/joungkyun/font-d2coding/d2coding.css')
+        link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/source-code-pro@2.30.0/source-code-pro.css')
+        .workframe
+                .codediv
+                        .html
+                                .codetitle
+                                        span HTML
+                                        .codesetting
+                                                img.sethtml(src='../../img/setting.png')
+                                                .setlib(style='height:85px;')
+                                                        p HTML 종류
+                                                        span.dropdown-el.hl
+                                                                input#html(type='radio', value='html',v-model='html')
+                                                                label(for='html') HTML
+                                                                input#haml(type='radio', value='haml',v-model='html')
+                                                                label(for='haml') HAML
+                                                                input#pug(type='radio', value='pug',v-model='html')
+                                                                label(for='pug') PUG
+                                .codehtml#editor(data-num=0)
+                        .css
+                                .codetitle
+                                        span CSS
+                                        .codesetting
+                                                img.setcss(src='../../img/setting.png')
+                                                //- .setlib
+                                .codecss#editor(data-num=1)
+                        .js
+                                .codetitle
+                                        span JS
+                                        .codesetting
+                                                img.setjs(src='../../img/setting.png')
+                                                //- .setlib
+                                .codejs#editor(data-num=2)
+                .resultdiv
+                        .result#cap
+                                iframe#iframe(:src='src', frameborder="0" width='100%' name='re_page' marginwidth='0' marginheight='0')
+                                p(style='display:none') {{total}}
+                        
+.workbtm
+        button.allbtn.test 댓글
+.layer
+        .save_layer
+        .popup_save_con.savelayer
+                .input_title.savelayer
+                        input(type='text' autocomplete="off" placeholder='프로젝트 제목' @input='titleinput' v-bind:value='title')
+                .input_open.savelayer
+                        input#open1(name='open', type='radio' value='public' v-model='open')
+                        label(for='open1') 공개
+                        input#open2(name='open', type='radio' value='private' v-model='open')
+                        label(for='open2') 비공개
+                .input_newpro_check.savelayer(:style="{display:viewnew}")
+                        input#newproject(type='checkbox' v-model='new_check')
+                        label(for='newproject') 새프로젝트
+                .input_version_check.savelayer(:style="{display:viewselect}")
+                        input#newversion(type='radio' value='new' v-model='version_check')
+                        label(for='newversion') 새버전
+                        input#oldversion(type='radio' value='old' v-model='version_check')
+                        label(for='oldversion') 기존버전사용
+                .input_version_select.savelayer(:style="{display:viewvl}")
+                        span.dropdown-el.savelayer.vl
+                                template(v-for='vers in ver')
+                                        input(:id='vers.ver_no' type='radio', :value='vers.ver_no', :data-pv='vers.pv_no' v-model='version_dl')
+                                        label(:for='vers.ver_no') {{vers.ver_no}}
+                .input_version.savelayer(:style="{display:viewinput}")
+                        input(type='text' autocomplete="off" placeholder='버전이름' @input='versioninput' v-bind:value='version')
+                .input_text.savelayer
+                        textarea#write(placeholder="설명")
+                .input_btn.savelayer
+                        button.allbtn#save(@click='save_project') 저장
+                        button.allbtn#close(@click='close') 취소
         script.
-                Split(['.newdiv', '.newdiv2'], {
-                        //- direction: 'horizontal',
-                        sizes:[45,45],
-                        minSize: [30, 30],
+                Vue.config.devtools = true 
+                log='#{log}'
+                nick='#{user.mem_nick}'
+                pr=#{pr}
+                if(log==0){
+                        theme='ace/theme/monokai'
+                        font='D2 coding'
+                        size='12px'
+                }else{
+                        theme='#{user.mo_theme}'
+                        font='#{user.mo_font}'
+                        size='#{user.mo_size}'
+                }
+                var codesetting=new Vue({
+                        el:'.codediv',
+                        data:{
+                                html:'html',
+                                js:'',
+                                css:'',
+                        },
+                })
+                var worksetting=new Vue({
+                        el:'.worksetting',
+                        data:{
+                                theme:theme,
+                                font:font,
+                                size:size
+                        },
+                        updated:function(){
+                                for(i=0;i<editorall.length;i++){
+                                        editorall[i].setTheme(this.theme)
+                                        editorall[i].setFontSize(this.size)
+                                        $('div[id=editor]').eq(i).css('font-family',this.font)
+                                }
+                        },
+                        methods:{
+                                usersetting(){
+                                        this.theme=theme
+                                        this.size=size
+                                        this.font=font
+                                },
+                                savesetting(){
+                                        $.ajax({
+                                                url:'/user/settingupdate',
+                                                dataType:'json',
+                                                type:'post',
+                                                data:{theme:worksetting.theme,size:worksetting.size,font:worksetting.font},
+                                                success:(result)=>{
+                                                        alert('설정이 저장되었습니다')
+                                                }
+                                        })
+                                }
+                        }
+                })
+                var version=new Vue({
+                        el:'.version_setting',
+                        data:{
+                                version_dl:'',
+                                ver:[],
+                                ver_text:'',
+                                pv_no:''
+                        },
+                        methods:{
+                                get_ver(e){
+                                        data={pv_no:this.pv_no}
+                                        $.ajax({
+                                                url:'/get_version',
+                                                dataType:'json',
+                                                type:'post',
+                                                data:data,
+                                                success:(version_result)=>{
+                                                        if(version_result.ok){
+                                                                editorall[0].getSession().setValue(version_result.result.pv_html)
+                                                                editorall[1].getSession().setValue(version_result.result.pv_css)
+                                                                editorall[2].getSession().setValue(version_result.result.pv_js)
+                                                                result.html=version_result.result.pv_html
+                                                                result.css=version_result.result.pv_css
+                                                                result.js=version_result.result.pv_js
+                                                                result.total=version_result.result.pv_html+version_result.result.pv_css+version_result.result.pv_js
+                                                                $('.project_version').children().text(version_result.result.ver_no)
+                                                        }else{
+                                                                alert('버전정보를 가져오는 중 오류가 발생하였습니다.')
+                                                        }
+                                                }
+                                        })
+                                },
+                                ver_close(e){
+                                        $('.version_setting').fadeOut()  
+                                }
+                        }
+                })
+                var save=new Vue({
+                        el:'.layer',
+                        data:{
+                                title:'', //제목
+                                open:'public', //공개여부
+                                version:'', //버전
+                                description:'', //설명
+                                nick:nick, //닉네임
+                                save:0, //저장여부
+                                ver:[], //기존버전정보
+                                version_check:'new', //기존버전사용여부
+                                version_dl:'', //현재버전
+                                viewvl:'none', //기존버전정보 표시여부
+                                viewinput:'block', //새로운버전인풋박스 표시여부
+                                viewselect:'none', //기존버전정보사용 표시 여부
+                                viewnew:'none', //새프로젝트 버튼 표시여부
+                                new_pr:pr, //새로운프로젝트인지 기존프로젝트인지
+                                new_check:1,//새 버전사용 여부
+                                pro_no:0, //프로젝트번호
+                                pv_no:0, //버전 번호
+                                img:''
+
+                        },
+                        mounted:function(){
+                                if(this.new_pr){
+                                        this.viewnew='inline-block'
+                                }
+                        },
+                        updated:function(){
+                                if(this.new_pr){
+                                        this.viewnew='inline-block'
+                                }
+                                if(this.new_check){
+                                        this.viewselect='none'
+                                        this.viewvl='none'
+                                }else if(!this.new_check){
+                                        this.viewselect='block'
+                                }
+                                if(this.version_check == 'old'){
+                                        this.viewvl='block'
+                                        this.viewinput='none'
+                                }else if(this.version_check=='new'){
+                                        this.viewvl='none'
+                                        this.viewinput='block'
+                                }
+                        },
+                        methods:{
+                                titleinput(e){
+                                        this.title = e.target.value
+                                },
+                                versioninput(e){
+                                        this.version=e.target.value
+                                },
+                                close(e){
+                                        $('.layer').fadeOut()
+                                },
+                                async save_project(e){
+                                        save.description=CKEDITOR.instances.write.getData()
+                                        data=new Object()
+                                        save.pv_no=$('input[id="'+save.version_dl+'"]').data('pv')
+                                        if(!save.new_check){
+                                                if(save.version_check=='old'){
+                                                        data={html:result.html,css:result.css,js:result.js,
+                                                                title:save.title,version:save.version_dl,ver_text:save.description,
+                                                                open:save.open,h_kind:'none',c_kind:'none',j_kind:'none',save:1,pro_no:save.pro_no,pv_no:save.pv_no,new_version:0,img:save.img,total:result.total}
+                                                }else{
+                                                        data={html:result.html,css:result.css,js:result.js,
+                                                                title:save.title,version:save.version,ver_text:save.description,
+                                                                open:save.open,h_kind:'none',c_kind:'none',j_kind:'none',save:1,pro_no:save.pro_no,pv_no:save.pv_no,new_version:1,img:save.img,total:result.total}
+                                                }
+                                        }else{
+                                                data={html:result.html,css:result.css,js:result.js,
+                                                        title:save.title,version:save.version,ver_text:save.description,
+                                                        open:save.open,h_kind:'none',c_kind:'none',j_kind:'none',save:0,img:save.img,total:result.total}
+                                        }
+                                        $.ajax({
+                                                url:'/save',
+                                                dataType:'json',
+                                                type:'post',
+                                                data:data,
+                                                success:(result)=>{
+                                                        if(result.ok){
+                                                                alert('저장되었습니다')
+                                                                $('.layer').fadeOut()
+                                                                $('.project_top').css('display','inline-block')
+                                                                $('.project_title').children().text(save.title)
+                                                                $('.project_version').children().text(save.version)
+                                                                $('.project_writer').children().text(save.nick)
+                                                                save.save=1
+                                                                save.pro_no=result.pro_no
+                                                                save.pv_no=result.pv_no
+                                                                save.viewnew='inline-block'
+                                                                save.ver=result.ver
+                                                                version.ver=result.ver
+                                                                version.version_dl=result.ver[0].ver_no
+                                                                version.ver_text=result.ver[0].ver_text
+                                                                save.version_dl=result.ver[0].ver_no
+                                                        }else{
+                                                                if(result.count==false){
+                                                                        alert('기존 버전이름과 겹칩니다.\n 새로운 버전이름으로 작성해주세요.')
+                                                                }else{
+                                                                        alert('저장이 실패했습니다')
+                                                                }
+                                                        }
+                                                }
+                                        })
+                                }
+                                //- async save_project(e){
+                                //-         html2canvas(document.getElementById("cap")).then(function (canvas) {
+                                //-                 save.img=canvas.toDataURL('image/jpeg')
+                                //-                 save.description=CKEDITOR.instances.write.getData()
+                                //-                 data=new Object()
+                                //-                 save.pv_no=$('input[id="'+save.version_dl+'"]').data('pv')
+                                //-                 if(!save.new_check){
+                                //-                         if(save.version_check=='old'){
+                                //-                                 data={html:result.html,css:result.css,js:result.js,
+                                //-                                         title:save.title,version:save.version_dl,ver_text:save.description,
+                                //-                                         open:save.open,h_kind:'none',c_kind:'none',j_kind:'none',save:1,pro_no:save.pro_no,pv_no:save.pv_no,new_version:0,img:save.img,total:result.total}
+                                //-                         }else{
+                                //-                                 data={html:result.html,css:result.css,js:result.js,
+                                //-                                         title:save.title,version:save.version,ver_text:save.description,
+                                //-                                         open:save.open,h_kind:'none',c_kind:'none',j_kind:'none',save:1,pro_no:save.pro_no,pv_no:save.pv_no,new_version:1,img:save.img,total:result.total}
+                                //-                         }
+                                //-                 }else{
+                                //-                         data={html:result.html,css:result.css,js:result.js,
+                                //-                                 title:save.title,version:save.version,ver_text:save.description,
+                                //-                                 open:save.open,h_kind:'none',c_kind:'none',j_kind:'none',save:0,img:save.img,total:result.total}
+                                //-                 }
+                                //-                 $.ajax({
+                                //-                         url:'/save',
+                                //-                         dataType:'json',
+                                //-                         type:'post',
+                                //-                         data:data,
+                                //-                         success:(result)=>{
+                                //-                                 if(result.ok){
+                                //-                                         alert('저장되었습니다')
+                                //-                                         $('.layer').fadeOut()
+                                //-                                         $('.project_top').css('display','inline-block')
+                                //-                                         $('.project_title').children().text(save.title)
+                                //-                                         $('.project_version').children().text(save.version)
+                                //-                                         $('.project_writer').children().text(save.nick)
+                                //-                                         save.save=1
+                                //-                                         save.pro_no=result.pro_no
+                                //-                                         save.pv_no=result.pv_no
+                                //-                                         save.viewnew='inline-block'
+                                //-                                         save.ver=result.ver
+                                //-                                         version.ver=result.ver
+                                //-                                         version.version_dl=result.ver[0].ver_no
+                                //-                                         version.ver_text=result.ver[0].ver_text
+                                //-                                         save.version_dl=result.ver[0].ver_no
+                                //-                                 }else{
+                                //-                                         if(result.count==false){
+                                //-                                                 alert('기존 버전이름과 겹칩니다.\n 새로운 버전이름으로 작성해주세요.')
+                                //-                                         }else{
+                                //-                                                 alert('저장이 실패했습니다')
+                                //-                                         }
+                                //-                                 }
+                                //-                         }
+                                //-                 })
+                                //-         })
+                                //- }
+                        }
+                })
+                CKEDITOR.replace( 'write',{
+                        filebrowserUploadUrl: '/board/imgupload',
+                });
+                CKEDITOR.on('instanceReady', function() { 
+                        for(i=0;i<$('[class*=cke]').length;i++){
+                                $('[class*=cke]').eq(i).addClass('savelayer')
+                        }
+                });
+                Split(['.codediv', '.resultdiv'], {
+                        sizes:[50,50],
+                        minSize: [0, 0],
+                        snapOffset: 0,
+                        elementStyle: function(dimension, size, gutterSize) {
+                                return {
+                                'width': 'calc(' + size + '% - ' + (gutterSize+2) + 'px)',
+                                }
+                        },
                         gutter: function (index, direction) {
                                 var gutter = document.createElement('div')
                                 gutter.className = 'gutter gutter-' + direction
-                                gutter.style.height = '139px'
+                                gutter.style.height = '100%'
                                 gutter.style.float='left'
                                 return gutter
                         },
-                        gutterSize: 2,
+                        gutterSize: 20,
+                        onDrag:function(sizes){
+                                for(i=0;i<3;i++){
+                                        editorall[i].resize();
+                                }
+                        },
+                        onDragEnd:function(sizes){
+                                for(i=0;i<3;i++){
+                                        editorall[i].resize();
+                                }
+                        },
+                        onDragStart:function(sizes){
+                                for(i=0;i<3;i++){
+                                        editorall[i].resize();
+                                }
+                        }
                 })
-                Split(['#one', '#two','#three'], {
+                Split(['.html', '.css','.js'], {
                         direction: 'vertical',
-                        sizes:[30,30,30],
+                        sizes:[33.19,33.19,33.19],
                         minSize: [0, 0, 0],
                         snapOffset: 0,
                         gutter: function (index, direction) {
                                 var gutter = document.createElement('div')
                                 gutter.className = 'gutter gutter-' + direction
-                                gutter.style.height = '139px'
+                                //- gutter.style.height = '139px'
                                 return gutter
                         },
                         gutterSize: 20,
+                        onDrag:function(sizes){
+                                for(i=0;i<3;i++){
+                                        editorall[i].resize();
+                                }
+                        },
+                        onDragEnd:function(sizes){
+                                for(i=0;i<3;i++){
+                                        editorall[i].resize();
+                                }
+                        },
+                        onDragStart:function(sizes){
+                                for(i=0;i<3;i++){
+                                        editorall[i].resize();
+                                }
+                        }
                 })
-                //- $(document).ready(function () {
-                //-         //- $('#mainSplitter').jqxSplitter({ width: 850, height: 850, orientation: 'horizontal', panels: [{ size: 300, collapsible: false }] });
-                //-         //- $('#firstNested').jqxSplitter({ width: '100%', height: '100%',  orientation: 'vertical', panels: [{ size: 300, collapsible: false}] });
-                //-         //- $('#secondNested').jqxSplitter({ width: '100%', height: '100%',  orientation: 'horizontal', panels: [{ size: 150}] });
-                //-         //- $('#thirdNested').jqxSplitter({ width: '100%', height: '100%',  orientation: 'horizontal', panels: [{ size: 150, collapsible: false}] });
-                //-         $('#first').jqxSplitter({ width: '850', height: '700',  orientation: 'horizontal', panels: [{ size: 350,collapsible:false},{min:"1%"}] });
-                //-         $('#second').jqxSplitter({ width: '100%', height: '100%',  orientation: 'horizontal', panels: [{ size: 175}] });
-                //- });
+                var editlen = $('div[id=editor]');
+                var editorall=new Array()
+                for(i=0;i<editlen.length;i++){
+                        editor=ace.edit(editlen[i])
+                        //- editor.setTheme("ace/theme/xcode");
+                        editor.setTheme(worksetting.theme);
+                        editor.setOptions({
+                                showPrintMargin:false,
+                                wrap:true,
+                                fontSize:worksetting.size,
+                                fontFamily:worksetting.font
+                        })
+                        editor.getSession().setWrapLimitRange();
+                        editor.getSession().setMode(i==0 ? "ace/mode/html" : i==1 ? "ace/mode/css" : "ace/mode/javascript");
+                        editorall.push(ace.edit(editlen[i]))
+                }
+                $('div[id=editor]').on('keyup',function(e){
+                        num=$(this).data('num')
+                        if(num==0){
+                                result.html=editorall[num].getSession().getValue()
+                                result.total=result.html+result.css+result.js
+                        }else if(num==1){
+                                result.css=editorall[num].getSession().getValue()
+                                result.total=result.html+result.css+result.js
+                        }else{
+                                result.js= editorall[num].getSession().getValue()
+                                result.total=result.html+result.css+result.js
+                        }
+                })
+                var result=new Vue({
+                        el:'.result',
+                        data:{
+                                html:'',
+                                css:'',
+                                js:'',
+                                total:'',
+                                src:'',
+                        },
+                        updated:function(){
+                                $.ajax({
+                                        url:'/result',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{html:result.html,css:result.css,js:result.js},
+                                        success:(data)=>{
+                                                doc = $('iframe')[0].contentWindow.document; 
+                                                $body = $('body',doc);
+                                                $body.html(data.total)
+                                                result.total=data.total
+                                        }
+                                })
+                        },
+                })
+                $('#question').click(()=>{
 
+                })
+                $('#version_select').click(()=>{
+                        $('.version_setting').fadeIn()
+                })
+                $('#save_project').click(()=>{
+                        $('.layer').fadeIn()
+                        $('.layer').click(function(e){
+                                var target=e.target
+                                if((!$(target).hasClass('savelayer') && !$(target).parent().hasClass('savelayer'))){
+                                        $('.layer').fadeOut()
+                                }
+                        })
+                })
+                $('#setting_project').click(()=>{
+                        $('.worksetting').fadeIn()
+                })
+                $('.hl').click((e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if(e.target.localName=='span'){
+                                $(e.target).toggleClass('expanded');
+                        }else{
+                                $(e.target).parent().toggleClass('expanded');
+                        }
+                        if($(e.target).attr('for')){
+                                $('#'+$(e.target).attr('for')).prop("checked", true);
+                        }
+                        codesetting.html=$(e.target).attr('for')
+                });
+                $('.dl').click((e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if(e.target.localName=='span'){
+                                $(e.target).toggleClass('expanded');
+                        }else{
+                                $(e.target).parent().toggleClass('expanded');
+                        }
+                        if($(e.target).attr('for')){
+                                $('#'+$(e.target).attr('for')).prop('checked',true);
+                        }
+                        if($(e.target).hasClass('sz')){
+                                worksetting.size=$(e.target).attr('for')
+                        }else{
+                                worksetting.font=$('#'+$(e.target).attr('for')).val()
+                        }
+                });
+                $('.vel').click((e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if(e.target.localName=='span'){
+                                $(e.target).toggleClass('expanded');
+                        }else{
+                                $(e.target).parent().toggleClass('expanded');
+                        }
+                        if($(e.target).attr('for')){
+                                $('#'+$(e.target).attr('for')).prop("checked", true);
+                        }
+                        version.version_dl=$(e.target).attr('for')
+                        version.ver_text=$('input[id="'+$(e.target).attr('for')+'"]').data('text')
+                        version.pv_no=$(e.target).prev()[0].dataset.pv
+                });
+                $('.vl').click((e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if(e.target.localName=='span'){
+                                $(e.target).toggleClass('expanded');
+                        }else{
+                                $(e.target).parent().toggleClass('expanded');
+                        }
+                        if($(e.target).attr('for')){
+                                $('#'+$(e.target).attr('for')).prop("checked", true);
+                        }
+                        save.version_dl=$(e.target).attr('for')
+                });
+                var iframeclick=false;
+                $(document).blur(function(){
+                        //- console.log(1)
+                        if(iframeclick){
+                                $('.worksetting').fadeOut()
+                                $('.version_setting').fadeOut()
+                                $('.userbar').fadeOut()
+                        }
+                });
+                $('#iframe').mouseover(function(){
+                        iframeclick = true;
+                });
+                $('#iframe').mouseout(function(){
+                        iframeclick = false;
+                });
+                $('.test').click(()=>{
+                        console.log(document.getElementById("iframe"))
+                        console.log($("#iframe")[0])
+                        console.log($('iframe')[0].contentWindow.document)
+                        console.log($('body',$('iframe')[0].contentWindow.document))
+                        console.log($body[0])
+                })
+                function partShot() {
+                //특정부분 스크린샷
+                        $body = $('body',$('iframe')[0].contentWindow.document)
+                        html2canvas($body[0]).then(function (canvas) {
+                                //jpg 결과값
+                                //- drawImg(canvas.toDataURL('image/jpeg'));
+                                save.img=canvas.toDataURL('image/jpeg')
+                                console.log(save.img)
+                                //이미지 저장
+                                //- saveAs(canvas.toDataURL(), 'file-name.jpg');
+                        }).catch(function (err) {
+                                console.log(err);
+                        });
+                }
 
+                function drawImg(imgData) {
+                        console.log(imgData);
+                        //imgData의 결과값을 console 로그롤 보실 수 있습니다.
+                        return new Promise(function reslove() {
+                        //내가 결과 값을 그릴 canvas 부분 설정
+                                var canvas = document.getElementById('canvas');
+                                var ctx = canvas.getContext('2d');
+                                //canvas의 뿌려진 부분 초기화
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                //- JQXElements.settings['splitter1Settings'] =
-                //- {
-                //-         orientation: 'horizontal', height: 600, panels: [{ size: 300, collapsible: false }]  
-                //- };    
-                //- JQXElements.settings['splitter2Settings'] =
-                //- {
-                //-         orientation: 'vertical', panels: [{ size: 300, collapsible: false }]
-                //- };
-                //- JQXElements.settings['splitter3Settings'] =
-                //- {
-                //-         orientation: 'horizontal', panels: [{ size: 150 }]
-                //- };
-                //- JQXElements.settings['splitter4Settings'] =
-                //- {
-                //-         orientation: 'horizontal', panels: [{ size: 150, collapsible: false }] 
-                //- };
-                //- var height=$('#top').height()
-                //- var height1=$('#bottom').height()
-                //- var startpos, diffpos=0, eControl = false;
-                //- var startpos1, diffpos1=0, eControl1 = false;
-                //- $(function(){
-                //-         var A = parseInt($('#A').width(), 10),
-                //-         B = parseInt($('#B').width(), 10),
-                //-         Z = parseInt($('#Z').width(), 10),
-                //-         minw =0,
-                //-         offset = $('#container').offset(),
-                //-         splitter = function(event, ui){
-                //-                 var aw = parseInt(ui.position.left),
-                //-                 bw = A + B - aw;
-                //-                 $('#A').css({width : aw})
-                //-                 $('#B').css({width : bw})
-                //-         };
-                //-         $('#Z').draggable({
-                //-                 axis : 'x',
-                //-                 containment : [
-                //-                 offset.left + minw,
-                //-                 offset.top,
-                //-                 offset.left + A + B - minw,
-                //-                 offset.top + $('#container').height()
-                //-                 ],
-                //-                 drag : splitter
-                //-         });
-                //- });
-                //- $('#middle').mousedown((e)=>{
-                //-         startpos = e.screenY + diffpos;
-                //-         eControl = true;
-                //-         return false;
-                //- })
-                //- $('#middle1').mousedown((e)=>{
-                //-         startpos1 = e.screenY + diffpos1;
-                //-         eControl1 = true;
-                //-         return false;
-                //- })
-                //- $(document.body).mouseup((e)=>{
-                //-         eControl = false;
-                //-         eControl1 = false;
-                //-         height=$('#top').height()
-                //-         height1=$('#bottom').height()
-                //- })
-                //- $(document.body).mousemove((e)=>{
-                //-         if (eControl) {
-                //-                 pos = e.screenY;
-                //-                 diffpos = startpos-pos;
-                //-                 //- console.log(diffpos)
-                //-                 //- console.log(height)
-                //-                 //- console.log(height - diffpos)
-                //-                 if (diffpos >= -height && diffpos <= height) {
-                //-                         $('#top').css({height:height - diffpos})
-                //-                         $('#bottom').css({height:height + diffpos})
-                //-                 }
-                //-                 else if(diffpos>=height){
-                //-                         $('#top').css({height:0})
-                //-                         $('#bottom').css({height:height*2})
-                //-                 }else if(diffpos<=-height){
-                //-                         $('#top').css({height:height*2})
-                //-                         $('#bottom').css({height:0})
-                //-                 }
-                //-         }else if (eControl1) {
-                //-                 pos = e.screenY;
-                //-                 diffpos1 = startpos1-pos;
-                //-                 console.log(diffpos1)
-                //-                 console.log(height1)
-                //-                 console.log(height1 - diffpos1)
-                //-                 if (diffpos1 >= -height1 && diffpos1 <= height1) {
-                //-                         $('#bottom').css({height:height1 - diffpos1})
-                //-                         $('#bottom1').css({height:height1 + diffpos1})
-                //-                 }
-                //-                 else if(diffpos1>=height1){
-                //-                         console.log(3)
-                //-                         $('#bottom').css({height:0})
-                //-                         $('#bottom1').css({height:height1*2})
-                //-                 }else if(diffpos1<=-height1){
-                //-                         console.log(4)
-                //-                         $('#bottom').css({height:height1*2})
-                //-                         $('#bottom1').css({height:0})
-                //-                 }
+                                var imageObj = new Image();
+                                imageObj.onload = function () {
+                                        ctx.drawImage(imageObj, 10, 10);
+                                //canvas img를 그리겠다.
+                                };
+                                imageObj.src = imgData;
+                                //그릴 image데이터를 넣어준다.
+
+                        }, function reject() { });
+                }
+                //- function saveAs(uri, filename) {
+                //-         var link = document.createElement('a');
+                //-         if (typeof link.download === 'string') {
+                //-                 link.href = uri;
+                //-                 link.download = filename;
+                //-                 document.body.appendChild(link);
+                //-                 link.click();
+                //-                 document.body.removeChild(link);
+                //-         } else {
+                //-                 window.open(uri);
                 //-         }
-                //- })
+                //- }
+
+
+
+                

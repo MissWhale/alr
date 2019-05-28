@@ -4,6 +4,7 @@
     var app=express();
     var session=require('express-session');
     var mss=require('express-mysql-session')(session);
+
     var option={ //세션설정
             host:'114.71.137.109',
             port:3306,
@@ -24,6 +25,8 @@
     app.use("/js", express.static(__dirname + '/js'));//js파일경로
     app.use(express.static(__dirname+'/file'));//js파일경로
     app.use("/file", express.static(__dirname + '/file'));//js파일경로
+    app.use(express.static(__dirname+'/project_result'));//프로젝트 결과물 파일경로
+    app.use("/project_result", express.static(__dirname + '/project_result'));//프로젝트 결과물 파일경로
     app.use(bodyParser.urlencoded({extended:false}));//post방식사용시 req.body로 값을 받아오기위해 사용
     app.use(bodyParser.json());//post방식사용시 req.body로 값을 받아오기위해 사용
     app.use(session({ //세션

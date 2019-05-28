@@ -1,4 +1,6 @@
 include ../main.jade
+        link(rel='stylesheet',href='../../js/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css')
+        script(src="//cdn.jsdelivr.net/highlight.js/9.5.0/highlight.min.js")
         .frame
                 .frametitle
                         strong 공지사항
@@ -17,10 +19,12 @@ include ../main.jade
                         if(!list.length)
                                 .none
                                         span 게시물이 없습니다         
-                        mixin list(title,view,com,like)
+                        mixin list(title,text,view,com,like)
                                 .top
                                         span=title
-                                .middle
+                                .middle.ck
+                                        .middlediv
+                                                p!=text
                                 .bottom
                                         .bottom_in
                                                 .view
@@ -35,22 +39,22 @@ include ../main.jade
                         each board,i in list
                                 if(i==0)
                                         .first_content(onclick='location.href="/notice/post?num=#{board.brd_no}"')
-                                                +list(board.brd_title,board.brd_cnt,board.com_cnt,board.brd_like)
+                                                +list(board.brd_title,board.brd_text,board.brd_cnt,board.com_cnt,board.brd_like)
                                 else
                                         -if(i%3==1){
                                                 | <div class='other'>
                                                 .content(onclick='location.href="/notice/post?num=#{board.brd_no}"')
-                                                        +list(board.brd_title,board.brd_cnt,board.com_cnt,board.brd_like)
+                                                        +list(board.brd_title,board.brd_text,board.brd_cnt,board.com_cnt,board.brd_like)
                                                 if(list.length==i+1)
                                                         |</div>
                                         -}else if(i%3==2){
                                                 .content(onclick='location.href="/notice/post?num=#{board.brd_no}"')
-                                                        +list(board.brd_title,board.brd_cnt,board.com_cnt,board.brd_like)
+                                                        +list(board.brd_title,board.brd_text,board.brd_cnt,board.com_cnt,board.brd_like)
                                                 if(list.length==i+1)
                                                         |</div>
                                         -}else{
                                                 .content(onclick='location.href="/notice/post?num=#{board.brd_no}"')
-                                                        +list(board.brd_title,board.brd_cnt,board.com_cnt,board.brd_like)
+                                                        +list(board.brd_title,board.brd_text,board.brd_cnt,board.com_cnt,board.brd_like)
                                                         
                                                 |</div>
                                         -}
@@ -109,6 +113,9 @@ include ../main.jade
                                                         a#final(href="/notice/noticelist?page="+pager.pagecount style="height: 14px;")
                                                                 img(src="../img/dforward_black.png")
         script.
+                $('code').each(function(i, block) { 
+                        hljs.highlightBlock(block); 
+                });
                 $('#write').click(()=>{
                         location.href='/notice/noticewrite'
                 })

@@ -39,4 +39,7 @@ CKEDITOR.editorConfig = function( config ) {
         config.codeSnippet_theme= 'monokai_sublime';
         config.autoGrow_maxHeight=600;
         config.filebrowserUploadUrl='/board/imgupload';
+        config.allowedContent = true;
+        // config.contentsCss = '../../css/base.css';
+        CKEDITOR.dtd.$removeEmpty.span = 0;
 };
