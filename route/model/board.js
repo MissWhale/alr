@@ -133,11 +133,11 @@ exports.boardlike=(req,res)=>{
         mem=req.session.mem_no
         result=req.body.result
         if(result==1){
-                sql='delete from board_like where brd_no='+num
+                sql='delete from board_like where mem_no=? and brd_no=?'
         }else{
-                sql='insert into board_like(mem_no,brd_no) values('+mem+','+num+');'
+                sql='insert into board_like(mem_no,brd_no) values(?,?);'
         }
-        db.query(sql,(err,result)=>{
+        db.query(sql,[mem,num],(err,result)=>{
                 if(err) {console.log(err);res.send(false)}
                 else{
                         if(result.affectedRows){
@@ -165,19 +165,25 @@ exports.post=(req,res)=>{
                                                         if(err) console.log(err)
                                                         else{
                                                                 if(no){
-                                                                        sql='select * from member where mem_no=?'
-                                                                        db.query(sql,no,(err,user)=>{
+                                                                        sql='select count(*) as cnt from board_like where mem_no=? and brd_no=?'
+                                                                        db.query(sql,[no,bno],(err,like)=>{
                                                                                 if(err) console.log(err)
                                                                                 else{
-                                                                                        if(no==1){
-                                                                                                res.render('boardpost',{log:1,user:user[0],board:board[0],com:comment,no:no})
-                                                                                        }else{
-                                                                                                res.render('boardpost',{log:2,user:user[0],board:board[0],com:comment,no:no})
-                                                                                        }
+                                                                                        sql='select * from member where mem_no=?'
+                                                                                        db.query(sql,no,(err,user)=>{
+                                                                                                if(err) console.log(err)
+                                                                                                else{
+                                                                                                        if(no==1){
+                                                                                                                res.render('boardpost',{log:1,user:user[0],board:board[0],com:comment,no:no,like:like[0].cnt})
+                                                                                                        }else{
+                                                                                                                res.render('boardpost',{log:2,user:user[0],board:board[0],com:comment,no:no,like:like[0].cnt})
+                                                                                                        }
+                                                                                                }
+                                                                                        })   
                                                                                 }
-                                                                        })   
+                                                                        })
                                                                 }else{
-                                                                        res.render('boardpost',{log:0,board:board[0],com:comment,no:false})
+                                                                        res.render('boardpost',{log:0,board:board[0],com:comment,no:false,like:0})
                                                                 }
                                                         }
                                                 })

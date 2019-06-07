@@ -7,7 +7,7 @@ include ../main.jade
                 .frametitle
                         .postlike
                                 span=board.brd_reg.format('yyyy-MM-dd')
-                                if(board.brd_like>0)
+                                if(like>0)
                                         img(src='../../img/like3.png' data-ok=1  data-log=1 onclick='like(this)')
                                 else
                                         if(log)
@@ -27,9 +27,11 @@ include ../main.jade
                                         span {{brd_like}}
                 .framebody(style='padding-top: 10px;')
                         .bodybtn
-                                button.allbtn.update 수정
-                                button.allbtn.delete 삭제
-                        .bodypost
+                                if(log)
+                                        button.allbtn.update 수정
+                                        button.allbtn.delete 삭제
+                                button.allbtn.list 목록
+                        .bodypost.ck
                                 p!=board.brd_text
                         .bodycomment(data-bnum=board.brd_no)
                                 .comtitle
@@ -98,6 +100,9 @@ include ../main.jade
                 if(#{log}){
                         CKEDITOR.replace('write');
                 }
+                $('.bodybtn .list').click(()=>{
+                        location.href='/board'
+                })
                 $('.bodybtn .update').click(()=>{
                         num=$('.bodycomment').data('bnum')
                         location.href='/board/boardupdate?num='+num
@@ -201,6 +206,7 @@ include ../main.jade
                 var commlist=null
                 var boardlist=null
                 window.onload = function(){
+                        Vue.config.devtools = true 
                         commlist = new Vue({
                                 el:".bodycomment",
                                 data:{

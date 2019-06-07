@@ -12,10 +12,19 @@ include ../main.jade
                                 else
                                         button.titlebtn(onclick='location.href="/prolist?page=#{Number(pno)+1}"') 다음 >
                 .framebody
-                        mixin list(title,view,com,like)
+                        mixin list(title,view,com,like,img,i,text,num)
                                 .top
                                         span=title
-                                .middle
+                                .middle_hidden(onclick="location.href='/work?pro=#{num}'")
+                                        span!=text
+                                .pro_middle
+                                        //- img(src=img)
+                                        iframe(src="", frameborder="0" data-total=img scrolling="no")
+                                        //- - let doc=document.getElementById(name).contentWindow.document
+                                        //- -console.log(doc)
+                                        //- doc = $('iframe')[0].contentWindow.document; 
+                                        //- $body = $('body',doc);
+                                        //- $body.html(data.total)
                                 .bottom
                                         .bottom_in
                                                 .view
@@ -30,22 +39,22 @@ include ../main.jade
                         each pro,i in list
                                 if(i==0)
                                         .first_content
-                                                +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                 else
                                         -if(i%3==1){
                                                 | <div class='other'>
                                                 .content
-                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                                 if(list.length==i+1)
                                                         |</div>
                                         -}else if(i%3==2){
                                                 .content
-                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                                 if(list.length==i+1)
                                                         |</div>
                                         -}else{
                                                 .content
-                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                                         
                                                 |</div>
                                         -}
@@ -104,6 +113,14 @@ include ../main.jade
                                                         a#final(href="/prolist?page="+pager.pagecount style="height: 14px;")
                                                                 img(src="../img/dforward_black.png")
         script.
+                //- html=#{list}
+                for(i=0;i<10;i++){
+                        doc = $('iframe')[i].contentWindow.document
+                        total=$('iframe').eq(i).data('total')
+                        $('body',doc).html(total)
+                        //- $body = $('body',doc);
+                        //- $body.html(data.total)
+                }
                 $("#first").hover(function(){
                         $("#first").children().attr('src','../img/dback_white.png');
                 },function(){

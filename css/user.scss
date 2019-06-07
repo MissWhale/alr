@@ -336,6 +336,7 @@ $timing:.3s;
                                         display:block;
                                         border-top: none;
                                         position: absolute;
+                                        width:calc(100% - 10px);
                                         top: 0;
                                         &:nth-child(2) {
                                                 margin-top: 0;
