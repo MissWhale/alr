@@ -608,23 +608,64 @@ $btn-color: #304adf;
         }
 }
 .framebody{
-    min-width: 600px;
-    padding-top: 40px;
-    .top{
-        height:50px;
-        background: rgba(38, 50, 56, 0.3);
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        span{
-            margin:17px 0px 0px 30px;
-            display:inline-block;
-            font-size:18px;
+        min-width: 600px;
+        padding-top: 40px;
+        .top{
+                height:50px;
+                background: rgba(38, 50, 56, 0.3);
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                span{
+                margin:17px 0px 0px 30px;
+                display:inline-block;
+                font-size:18px;
         }
     }
-    .middle{
-        padding:10px 20px;
-        height:180px;
+    .middle_hidden{
+                padding:10px 20px;
+                height: 180px;
+                //     width:100%;
+                position: relative;
+                z-index:4;
+                background:rgb(139, 139, 139);
+                color:white;
+                opacity: 0;
+                overflow: hidden;
+                -webkit-transition: opacity 0.5s ease-in-out;
+                -moz-transition: opacity 0.5s ease-in-out;
+                -ms-transition: opacity 0.5s ease-in-out;
+                -o-transition: opacity 0.5s ease-in-out;
+                transition: opacity 0.5s ease-in-out;
+                &:hover,&:active,&:focus{
+                        opacity: 0.9;
+                        cursor: pointer;
+                }
+                // animation: opac2 1s;
+                // &:hover,&:active,&:focus{
+                //         animation: opac1 1s;
+                // }
+                // @keyframes opac1 {
+                //         0% {
+                //                 opacity: 0;
+                //         }
+                //         100% {
+                //                 opacity: 0.9;
+                //         }
+                // }
+                // @keyframes opac2 {
+                //         0% {
+                //                 opacity: 0.9;
+                //         }
+                //         100% {
+                //                 opacity: 0;
+                //         }
+                // }
+        }
+    .pro_middle{
+        // padding:10px 20px;
+        height:200px;
         overflow:hidden;
+        margin-top:-200px;
         .middlediv{
                 text-overflow: ellipsis;
                 white-space: normal;
@@ -639,6 +680,12 @@ $btn-color: #304adf;
                 transform-origin: top left;
         }
     }
+    .brd_middle{
+            height: 180px;
+            padding:10px 20px;
+            overflow:hidden;
+    }
+
     .bottom{
         height:50px;
         background: rgba(38, 50, 56, 0.3);

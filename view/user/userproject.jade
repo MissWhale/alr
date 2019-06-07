@@ -29,7 +29,11 @@ include ../main.jade
                                 mixin list(title,view,com,like)
                                         .top
                                                 span=title
-                                        .middle
+                                        .middle_hidden(onclick="location.href='/work?pro=#{num}'")
+                                        span!=text
+                                        .pro_middle
+                                                //- img(src=img)
+                                                iframe(src="", frameborder="0" data-total=img scrolling="no")
                                         .bottom
                                                 .bottom_in
                                                         .view

@@ -166,6 +166,9 @@ html
                         if(!$(target).hasClass('vsd') && !$(target).parent().hasClass('vsd')){
                                 $('.version_setting').fadeOut()
                         }
+                        if(!$(target).hasClass('set') && !$(target).parent().hasClass('set')){
+                                $('.setlib').fadeOut()
+                        }
                         $('.dropdown-el').removeClass('expanded');
                 })
                 $('#menu').hover(()=>{

@@ -616,23 +616,47 @@ a:hover, a:active, a:focus {
   display: inline-block;
   font-size: 18px; }
 
-.framebody .middle {
+.framebody .middle_hidden {
   padding: 10px 20px;
   height: 180px;
-  overflow: hidden; }
+  position: relative;
+  z-index: 4;
+  background: #8b8b8b;
+  color: white;
+  opacity: 0;
+  overflow: hidden;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -ms-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out; }
 
-.framebody .middle .middlediv {
+.framebody .middle_hidden:hover, .framebody .middle_hidden:active, .framebody .middle_hidden:focus {
+  opacity: 0.9;
+  cursor: pointer; }
+
+.framebody .pro_middle {
+  height: 200px;
+  overflow: hidden;
+  margin-top: -200px; }
+
+.framebody .pro_middle .middlediv {
   text-overflow: ellipsis;
   white-space: normal;
   word-wrap: normal;
   overflow: hidden;
   height: 180px; }
 
-.framebody .middle iframe {
+.framebody .pro_middle iframe {
   transform: scale(0.5);
   width: 200%;
   height: 200%;
   transform-origin: top left; }
+
+.framebody .brd_middle {
+  height: 180px;
+  padding: 10px 20px;
+  overflow: hidden; }
 
 .framebody .bottom {
   height: 50px;

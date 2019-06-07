@@ -1,4 +1,6 @@
 var db=require('../../db');
+var Entities=require('html-entities').XmlEntities
+const ent=new Entities()
 var fs=require('fs')
 exports.prolist=(req,res)=>{ //메인페이지
         var max=10; //페이지당 문제수
@@ -42,26 +44,69 @@ exports.prolist=(req,res)=>{ //메인페이지
 }
 exports.workpage=(req,res)=>{
         var no=req.session.mem_no
-        if(no){
-                sql='select * from member natural join member_option where mem_no=?'
-                db.query(sql,no,(err,user)=>{
+        var pro_no=req.query.pro
+        if(pro_no){
+                sql='update project set pro_cnt=pro_cnt+1 where pro_no=?'
+                db.query(sql,pro_no,(err,result)=>{
+                        if(err) console.log(err)
+                })
+                sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a natural join project_version natural join member where pro_no=?'
+                db.query(sql,pro_no,(err,result)=>{
                         if(err) console.log(err)
                         else{
-                                if(no==1){
-                                        res.render('work',{log:1,user:user[0],work:1,pr:1})
+                                // console.log(result[0])
+                                result[0].pv_html=ent.decode(result[0].pv_html)
+                                if(no){
+                                        if(result[0].mem_no==no){
+                                                master=1
+                                        }else{
+                                                master=0
+                                        }
+                                        sql='select count(*) as cnt from project_like where mem_no=? and pro_no=?'
+                                        db.query(sql,[no,pro_no],(err,like)=>{
+                                                if(err) console.log(err)
+                                                else{
+                                                        sql='select * from member natural join member_option where mem_no=?'
+                                                        db.query(sql,no,(err,user)=>{
+                                                                if(err) console.log(err)
+                                                                else{
+                                                                        if(no==1){
+                                                                                // console.log(result)
+                                                                                res.render('work',{log:1,user:user[0],work:1,pr:1,master:master,source:result[0],like:like[0].cnt})
+                                                                        }else{
+                                                                                res.render('work',{log:2,user:user[0],work:1,pr:1,master:master,source:result[0],like:like[0].cnt})
+                                                                        }
+                                                                }
+                                                        })   
+                                                }
+                                        })
                                 }else{
-                                        res.render('work',{log:2,user:user[0],work:1,pr:0})
+                                        res.render('work',{log:0,work:1,user:false,pr:1,master:0,source:result[0],like:0})
                                 }
                         }
-                })   
+                })
         }else{
-                res.render('work',{log:0,work:1,user:false})
+                if(no){
+                        sql='select * from member natural join member_option where mem_no=?'
+                        db.query(sql,no,(err,user)=>{
+                                if(err) console.log(err)
+                                else{
+                                        if(no==1){
+                                                res.render('work',{log:1,user:user[0],work:1,pr:0})
+                                        }else{
+                                                res.render('work',{log:2,user:user[0],work:1,pr:0})
+                                        }
+                                }
+                        })   
+                }else{
+                        res.render('work',{log:0,work:1,user:false,pr:0})
+                }
         }
 }
 exports.result=(req,res)=>{
         html='<body onclick="test()">'+req.body.html+'</body>'
         css='<head><style>'+req.body.css+'</style></head>'
-        js='<script>'+req.body.js+'</script>'
+        js='<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script><script>'+req.body.js+'</script>'
         total=css+html+js
         res.send({total:total})
         // fs.readFile('./project_result/test.html','utf-8',(err,data)=>{
@@ -208,4 +253,97 @@ exports.save=(req,res)=>{
                 })
         }
 }
-
+exports.like=(req,res)=>{
+        num=req.body.num
+        mem=req.session.mem_no
+        result=req.body.result
+        if(result==1){
+                sql='delete from project_like where mem_no=? and pro_no=?'
+        }else{
+                sql='insert into project_like(mem_no,pro_no) values(?,?)'
+        }
+        db.query(sql,[mem,num],(err,result)=>{
+                if(err) {console.log(err);res.send(false)}
+                else{
+                        if(result.affectedRows){
+                                res.send(true)
+                        }else{
+                                res.send(false)
+                        }
+                }
+        })
+}
+exports.get_comment=(req,res)=>{
+        pro_no=req.body.pro_no
+        mem_no=req.session.mem_no
+        sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a natural join project_comment natural join member where pro_no=?'
+        db.query(sql,pro_no,(err,result)=>{
+                if(err) {console.log(err);res.send({ok:false})}
+                else{
+                        if(result.length){
+                                for(i=0;i<result.length;i++){
+                                        result[i].pc_reg=result[i].pc_reg.format('yyyy-MM-dd')
+                                }
+                                for(i=0;i<result.length;i++){
+                                        result[i].mem_pic='../../file/usericon/'+result[i].mem_pic
+                                }
+                                for(i=0;i<result.length;i++){
+                                        if(result[i].mem_no==mem_no){
+                                                result[i].pro_no=true
+                                        }else{
+                                                result[i].pro_no=false
+                                        }
+                                }
+                                res.send({ok:true,list:result,com_cnt:result[0].com_cnt,like_cnt:result[0].pro_like,pro_cnt:result[0].pro_cnt})
+                        }else{
+                                res.send({ok:false})
+                        }
+                }
+        })
+}
+exports.write_comment=(req,res)=>{
+        no=req.session.mem_no
+        pro_no=req.body.pro_no
+        comment=req.body.comment
+        sql='insert into project_comment(pro_no,mem_no,pc_text) values(?,?,?)'
+        db.query(sql,[pro_no,no,comment],(err,result)=>{
+                if(err) res.send(false)
+                else{
+                        if(result.affectedRows){
+                                res.send(true)
+                        }else{
+                                res.send(false)
+                        }
+                }
+        })
+}
+exports.update_comment=(req,res)=>{
+        pc_no=req.body.pc_no
+        comment=req.body.comment
+        sql='update project_comment set pc_text=? where pc_no=?'
+        db.query(sql,[comment,pc_no],(err,result)=>{
+                if(err) {console.log(err);res.send(false)}
+                else{
+                        if(result.affectedRows){
+                                res.send(true)
+                        }else{
+                                res.send(false)
+                        }
+                }
+        })
+}
+exports.delete_comment=(req,res)=>{
+        pc_no=req.body.pc_no
+        sql='delete from project_comment where pc_no=?'
+        db.query(sql,pc_no,(err,result)=>{
+                if(err) {console.log(err);res.send(false)}
+                else{
+                        console.log(result)
+                        if(result.affectedRows){
+                                res.send(true)
+                        }else{
+                                res.send(false)
+                        }
+                }
+        })
+}

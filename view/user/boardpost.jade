@@ -7,7 +7,7 @@ include ../main.jade
                 .frametitle
                         .postlike
                                 span=board.brd_reg.format('yyyy-MM-dd')
-                                if(board.brd_like>0)
+                                if(like>0)
                                         img(src='../../img/like3.png' data-ok=1  data-log=1 onclick='like(this)')
                                 else
                                         if(log)
