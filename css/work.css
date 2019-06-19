@@ -535,7 +535,8 @@
   border: .06em solid transparent;
   border-radius: 1em;
   background-color: #cde4f5;
-  transition: 0.3s all ease-in-out; }
+  transition: 0.3s all ease-in-out;
+  z-index: 500; }
 
 .layer .popup_save_con .dropdown-el input {
   display: none; }

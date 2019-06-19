@@ -10,7 +10,7 @@ html
 
         body
             .divtop
-                img.logo(src='../img/logo1.png' onclick='location.href="/"')
+                img.logo(src='../img/logo2.png' onclick='location.href="/"')
                 img.menu#menu(src='../img/menu.png')
                 .menubar#bar
                         ul
@@ -26,6 +26,10 @@ html
                                 li(onclick='location.href="/notice"')
                                         img(src='../img/notice.png')
                                         span 공지사항
+                                if(log==1)
+                                        li(onclick='location.href="/member"')
+                                                img(src='../img/member.png')
+                                                span 회원관리
                 .project_top
                         .project_title
                                 span
@@ -53,15 +57,15 @@ html
                 else
                         button.btn(onclick='location.href="/login"') 로그인
                 if(work != 1)
-                        .search
-                                input.textbox(type='text', placeholder='검색')
-                                input.button(title='Search', value='', type='button')
+                        //- .search
+                        //-         input.textbox(type='text', placeholder='검색')
+                        //-         input.button(title='Search', value='', type='button')
                 else
                         .workbtn
                                 if(log)
-                                        button.allbtn#question 질문
-                                                img(src='../img/question.png')
-                                        button.allbtn#version_select.vsd 버전
+                                        //- button.allbtn#question 질문
+                                        //-         img(src='../img/question.png')
+                                        button.allbtn#version_select.vsd(style='display:none') 버전
                                                 img(src='../img/version.png')
                                         button.allbtn#save_project.savelayer 저장
                                                 img(src='../img/save.png')

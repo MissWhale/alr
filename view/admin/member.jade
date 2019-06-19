@@ -1,0 +1,180 @@
+include ../main.jade
+        .frame
+                .frametitle
+                        strong 회원관리
+                        .btndiv
+                                if(pno<2)
+                                        button.titlebtn(onclick='alert("첫페이지입니다")') < 이전
+                                else
+                                        button.titlebtn(onclick='location.href="/member/memberlist?page=#{pno-1}"') < 이전
+                                if(pager.pagecount==pno || pager.pagecount==0)
+                                        button.titlebtn(onclick='alert("마지막페이지입니다")') 다음 >
+                                else
+                                        button.titlebtn(onclick='location.href="/member/memberlist?page=#{Number(pno)+1}"') 다음 >
+                .framebody
+                        .limiter
+                                .container-table100
+                                        .wrap-table100
+                                                .table
+                                                .row.header
+                                                        .cell
+                                                                | 이메일
+                                                        .cell
+                                                                | 닉네임
+                                                        .cell
+                                                                | 가입일자
+                                                        .cell
+                                                                | 접속횟수
+                                                        .cell
+                                                                | 상태
+                                                each member,i in list
+                                                        .row
+                                                                .cell(data-title='이메일')=member.mem_email
+                                                                .cell(data-title='닉네임')=member.mem_nick
+                                                                .cell(data-title='가입일자')=member.mem_reg.format('yyyy-MM-dd')
+                                                                .cell(data-title='접속횟수')=member.mem_cnt
+                                                                if(member.mem_flag==0)
+                                                                        .cell(data-title='상태')
+                                                                                .icon_div
+                                                                                        img#setting(src='../../img/usersetting.png' data-click=1 data-status=i data-no=member.mem_no)
+                                                                                        img#close(src='../../img/close.png' data-flag=member.mem_flag data-status=i)
+                                                                                .dl
+                                                                                        -index=10-i
+                                                                                        span.dropdown-el( style='z-index:'+index data-bind='false')
+                                                                                                input#normal(type='radio', name='status'+i value='0', checked='checked' )
+                                                                                                label(for='normal' ) 정상
+                                                                                                input#delete(type='radio', name='status'+i value='1' )
+                                                                                                label(for='delete' ) 삭제
+                                                                                                input#black(type='radio', name='status'+i value='2' )
+                                                                                                label(for='black' ) 블랙
+                                                                if(member.mem_flag==1)
+                                                                        .cell(data-title='상태')
+                                                                                .icon_div
+                                                                                        img#setting(src='../../img/usersetting.png' data-click=1 data-status=i data-no=member.mem_no)
+                                                                                        img#close(src='../../img/close.png' data-flag=member.mem_flag data-status=i)
+                                                                                .dl
+                                                                                        -index=10-i
+                                                                                        span.dropdown-el( style='z-index:'+index data-bind='false')
+                                                                                                input#normal(type='radio', name='status'+i value='0'  )
+                                                                                                label(for='normal' ) 정상
+                                                                                                input#delete(type='radio', name='status'+i value='1' checked='checked' )
+                                                                                                label(for='delete' ) 삭제
+                                                                                                input#black(type='radio', name='status'+i value='2' )
+                                                                                                label(for='black' ) 블랙
+                                                                if(member.mem_flag==2)
+                                                                        .cell(data-title='상태')
+                                                                                .icon_div
+                                                                                        img#setting(src='../../img/usersetting.png' data-click=1 data-status=i data-no=member.mem_no)
+                                                                                        img#close(src='../../img/close.png' data-flag=member.mem_flag data-status=i)
+                                                                                .dl
+                                                                                        -index=10-i
+                                                                                        span.dropdown-el( style='z-index:'+index data-bind='false')
+                                                                                                input#normal(type='radio', name='status'+i value='0'  )
+                                                                                                label(for='normal' ) 정상
+                                                                                                input#delete(type='radio', name='status'+i value='1')
+                                                                                                label(for='delete' ) 삭제
+                                                                                                input#black(type='radio', name='status'+i value='2'  checked='checked')
+                                                                                                label(for='black' ) 블랙
+                .paging
+                        -var pover=Math.trunc(pager.pagecount/10)
+                        if(!email)
+                                -var emaild=''
+                        if(pover)
+                                if(pno<11)
+                                - var n = 1 //시작페이지
+                                - var max=10 //끝페이지
+                                - var next=11 //다음10페이지
+                                if(pager.pagecount%10!=0)
+                                        - var check=1 //다음,마지막페이지 체크
+                                else
+                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                - var fp=Math.trunc(pager.pagecount/10) //마지막페이지앞자리
+                                -var pna=pager.pagecount-n //잔여페이지수
+                                -var next=(ip+1)*10+1 //다음10페이지
+                                -var prev=ip*10 //전10페이지
+                                if(ip == fp)
+                                        -var max=n+pna
+                                else
+                                        -var max=n+9
+                        else
+                                - var n = 1
+                                - var max=pager.pagecount
+                        span
+                                ul
+                                        if(pno>10)
+                                                li
+                                                        a#first(href="/member/memberlist?page=1" style="height: 14px;")
+                                                                img(src="../img/dback_black.png")
+                                        if(prev)
+                                                li
+                                                        a#prev(href="/member/memberlist?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                img(src="../img/back_black.png")
+                                        while n <= max
+                                                li
+                                                        if(pno==n)
+                                                                a(href="/member/memberlist?page="+n style="color: #fff;border: 1px solid rgb(0, 153, 255);background-color: rgb(0, 153, 255);")=n++
+                                                        else
+                                                                a(href="/member/memberlist?page="+n)=n++
+                                        if((ip != fp && pager.pagecount > max)|| pager.pagecount>max)
+                                                li
+                                                        a#next(href="/member/memberlist?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                img(src="../img/forward_black.png")
+                                                li
+                                                        a#final(href="/member/memberlist?page="+pager.pagecount style="height: 14px;")
+                                                                img(src="../img/dforward_black.png")
+        script.
+                $('img[id="close"]').click((e)=>{
+                        $(e.target).css('display','none')
+                        $(e.target).parent().next().children().data('bind','false')
+                        $("input:radio[name='status"+$(e.target).data('status')+"']:input[value="+$(e.target).data("flag")+"]").prop('checked',true)
+                        $(e.target).prev().data('click',1)
+                })
+                $('img[id="setting"]').click((e)=>{
+                        if($(e.target).data('click')){
+                                $(e.target).next().css('display','inline')
+                                $(e.target).parent().next().children().data('bind','true')
+                                $(e.target).data('click',0)
+                        }else{
+                                flag=$("input:radio[name='status"+$(e.target).data('status')+"']:checked").val()
+                                no=$(e.target).data('no')
+                                $.ajax({
+                                        url:'/member/statuschange',
+                                        dataType:'json',
+                                        type:'post',
+                                        data:{no:no,flag:flag},
+                                        success:(result)=>{
+                                                if(result){
+                                                        alert("변경완료")
+                                                        $(e.target).next().css('display','none')
+                                                        $(e.target).parent().next().children().data('bind','false')
+                                                        $(e.target).data('click',1)
+                                                }else{
+                                                        alert("변경취소")
+                                                        $(e.target).next().css('display','none')
+                                                        $(e.target).parent().next().children().data('bind','false')
+                                                        $(e.target).data('click',1)
+                                                }
+                                        }
+                                })
+                        }
+                })
+
+                $('span[class="dropdown-el"]').click((e)=>{
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if($(e.target).parent().data('bind')=="true"){
+                                if(e.target.localNam=='span'){
+                                        $(e.target).toggleClass('expanded');
+                                }else{
+                                        $(e.target).parent().toggleClass('expanded');
+                                }
+                                if($(e.target).attr('for')){
+                                        $(e.target).prev().prop('checked',true)
+                                        //- $('#'+$(e.target).attr('for')).prop('checked',true);
+                                }
+                        }
+                });
+                $(document).click(()=>{
+                        $('.dropdown-el').removeClass('expanded');
+                });

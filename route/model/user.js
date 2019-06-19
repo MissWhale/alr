@@ -57,10 +57,10 @@ exports.project=(req,res)=>{
                         else{
                                 var count=result[0].count
                                 if(text){
-                                        sql="select *,(select count(*) from project_comment b where b.pro_no=project.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=project.pro_no) as pro_like from project where mem_no=? and pro_title like ? order by "+type+" limit ?,?";
+                                        sql="select *,(select count(*) from project_comment b where b.pro_no=project.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=project.pro_no) as pro_like from project natural join project_version where mem_no=? and pro_title like ? order by "+type+" limit ?,?";
                                         data.push(no,'%'+text+'%',start,max)
                                 }else{
-                                        sql="select *,(select count(*) from project_comment b where b.pro_no=project.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=project.pro_no) as pro_like from project where mem_no=? order by "+type+" limit ?,?";
+                                        sql="select *,(select count(*) from project_comment b where b.pro_no=project.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=project.pro_no) as pro_like from project natural join project_version where mem_no=? order by "+type+" limit ?,?";
                                         data.push(no,start,max)
                                 }
                                 db.query(sql,data,(err,project)=>{

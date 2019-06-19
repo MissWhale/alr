@@ -39,6 +39,7 @@
     app.use('/user', require('./route/controller/userctr')); //회원정보관련 라우팅
     app.use('/notice', require('./route/controller/noticectr')); //성적관련 라우팅
     app.use('/board', require('./route/controller/boardctr')); //게시판관련 라우팅
+    app.use('/member', require('./route/controller/memberctr')); //회원관리관련 라우팅
     app.use(['/','/project'], require('./route/controller/projectctr')); //게시판관련 라우팅
     app.listen(3000,()=>{ 
             console.log('Conneted 3000 port');
