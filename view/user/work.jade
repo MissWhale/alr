@@ -105,7 +105,8 @@ include ../main.jade
                                                 img(src='../../img/like.png')
                                                 span {{like_cnt}}
                                 .text.savelayer
-                                        p!=source.ver_text
+                                        if(pr)
+                                                p!=source.ver_text
                 .pr_comment_layer.savelayer
                         .comtitle.savelayer
                                 p 댓글
@@ -137,6 +138,7 @@ include ../main.jade
                 log=#{log}
                 nick='#{user.mem_nick}'
                 pr=#{pr}
+                master=#{master}
                 html=''
                 css=''
                 js=''
@@ -144,8 +146,9 @@ include ../main.jade
                 title=''
                 nick=''
                 version_name=''
-                pro_no=''
+                pro_no='#{source.pro_no}'
                 console.log(log)
+                console.log(pro_no)
                 $('.pr_comment').css('display','none')
                 if(log==0){
                         theme='ace/theme/monokai'
@@ -171,6 +174,28 @@ include ../main.jade
                         $('.project_version').children().text(version_name)
                         $('.project_writer').children().text(nick)
                 }
+                if(master){
+                        $('#version_select').css('display','inline-block')
+                        $.ajax({
+                                url:'/get_version_all',
+                                dataType:'json',
+                                type:'post',
+                                data:{pro_no:pro_no},
+                                success:(result)=>{
+                                        save.ver=result.list
+                                        save.pro_no=result.list[0].pro_no
+                                        save.pv_no=result.list[0].pv_no
+                                        save.viewname='inline-block'
+                                        save.version_dl=result.list[0].ver_no
+                                        save.new_check=0
+                                        save.version_check='old'
+                                        version.ver=result.list
+                                        version.version_dl=result.list[0].ver_no
+                                        version.ver_text=result.list[0].ver_text
+                                        CKEDITOR.instances.write.setData(version.ver_text)
+                                }
+                        })
+                }
                 var comment=new Vue({
                         el:'.comment_layer',
                         data:{
@@ -191,6 +216,7 @@ include ../main.jade
                                                 type:'post',
                                                 data:{pro_no:pro_no},
                                                 success:(result)=>{
+                                                        console.log(result)
                                                         if(result.ok){
                                                                 comment.cl=result.list
                                                                 comment.com_cnt=result.com_cnt
@@ -495,7 +521,9 @@ include ../main.jade
                                                                 version.ver=result.ver
                                                                 version.version_dl=result.ver[0].ver_no
                                                                 version.ver_text=result.ver[0].ver_text
+                                                                CKEDITOR.instances.write.setData(version.ver_text)
                                                                 save.version_dl=result.ver[0].ver_no
+                                                                $('#version_select').css('display','inline-block')
                                                                 $('.pr_comment').css('display','inline-block')
                                                         }else{
                                                                 if(result.count==false){
@@ -728,8 +756,10 @@ include ../main.jade
                         }
                         if($(e.target).attr('for')){
                                 $('#'+$(e.target).attr('for')).prop("checked", true);
+                                CKEDITOR.instances.write.setData($('input[id="'+$(e.target).attr('for')+'"').eq(0).data('text'))
                         }
                         save.version_dl=$(e.target).attr('for')
+                        
                 });
                 var iframeclick=false;
                 $(document).blur(function(){
@@ -749,7 +779,3 @@ include ../main.jade
                 $('#iframe').mouseout(function(){
                         iframeclick = false;
                 });
-
-
-
-                

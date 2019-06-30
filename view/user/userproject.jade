@@ -26,11 +26,11 @@ include ../main.jade
                                 if(!list.length)
                                         .none
                                                 span 게시물이 없습니다         
-                                mixin list(title,view,com,like)
+                                mixin list(title,view,com,like,img,i,text,num)
                                         .top
                                                 span=title
                                         .middle_hidden(onclick="location.href='/work?pro=#{num}'")
-                                        span!=text
+                                                span!=text
                                         .pro_middle
                                                 //- img(src=img)
                                                 iframe(src="", frameborder="0" data-total=img scrolling="no")
@@ -49,23 +49,21 @@ include ../main.jade
                                         -if(i%3==0){
                                                 | <div class='other'>
                                                 .content
-                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                                 if(list.length==i+1)
                                                         |</div>
                                         -}else if(i%3==2){
                                                 .content
-                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                                 |</div>
                                         -}else{
                                                 .content
-                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like)
+                                                        +list(pro.pro_title,pro.pro_cnt,pro.com_cnt,pro.pro_like,pro.pv_file,i,pro.ver_text,pro.pro_no)
                                                 if(list.length==i+1)
                                                         |</div>
                                         -}
                 .paging
                         -var pover=Math.trunc(pager.pagecount/10)
-                        if(!email)
-                                -var emaild=''
                         if(pover)
                                 if(pno<11)
                                 - var n = 1 //시작페이지
@@ -118,6 +116,13 @@ include ../main.jade
                                                                 img(src="../img/dforward_black.png")
 
         script.
+                for(i=0;i<10;i++){
+                        doc = $('iframe')[i].contentWindow.document
+                        total=$('iframe').eq(i).data('total')
+                        $('body',doc).html(total)
+                        //- $body = $('body',doc);
+                        //- $body.html(data.total)
+                }
                 var text='#{text}'
                 var pno='#{pno}'
                 var type='#{type}'

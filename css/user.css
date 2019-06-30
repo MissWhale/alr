@@ -363,6 +363,7 @@
   margin: 12px 0px 0px 340px; }
 
 .framebody .order .dropdown-el {
+  z-index: 100;
   min-width: 12em;
   position: absolute;
   display: inline-block;

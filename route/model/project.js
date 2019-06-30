@@ -130,6 +130,16 @@ exports.result=(req,res)=>{
         //         }
         // })
 }
+exports.get_version_all=(req,res)=>{
+        pro_no=req.body.pro_no
+        sql='select * from project_version where pro_no=?'
+        db.query(sql,pro_no,(err,result)=>{
+                if(err) {console.log(err);res.send({ok:false})}
+                else{
+                        res.send({ok:true,list:result})
+                }
+        })
+}
 exports.get_version=(req,res)=>{
         pv_no=req.body.pv_no
         sql='select * from project natural join project_version where pv_no=?'
@@ -276,28 +286,38 @@ exports.like=(req,res)=>{
 exports.get_comment=(req,res)=>{
         pro_no=req.body.pro_no
         mem_no=req.session.mem_no
-        sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a natural join project_comment natural join member where pro_no=?'
+        sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project_comment a natural join member where pro_no=?'
         db.query(sql,pro_no,(err,result)=>{
                 if(err) {console.log(err);res.send({ok:false})}
                 else{
-                        if(result.length){
-                                for(i=0;i<result.length;i++){
-                                        result[i].pc_reg=result[i].pc_reg.format('yyyy-MM-dd')
-                                }
-                                for(i=0;i<result.length;i++){
-                                        result[i].mem_pic='../../file/usericon/'+result[i].mem_pic
-                                }
-                                for(i=0;i<result.length;i++){
-                                        if(result[i].mem_no==mem_no){
-                                                result[i].pro_no=true
+                        sql='select pro_cnt from project where pro_no=?'
+                        db.query(sql,pro_no,(err,view)=>{
+                                if(err) {console.log(err)}
+                                else{
+                                        if(result.length){
+                                                for(i=0;i<result.length;i++){
+                                                        result[i].pc_reg=result[i].pc_reg.format('yyyy-MM-dd')
+                                                }
+                                                for(i=0;i<result.length;i++){
+                                                        if(result[i].mem_pic){
+                                                                result[i].mem_pic='../../file/usericon/'+result[i].mem_pic
+                                                        }else{
+                                                                result[i].mem_pic='../../img/name.png'
+                                                        }
+                                                }
+                                                for(i=0;i<result.length;i++){
+                                                        if(result[i].mem_no==mem_no){
+                                                                result[i].pro_no=true
+                                                        }else{
+                                                                result[i].pro_no=false
+                                                        }
+                                                }
+                                                res.send({ok:true,list:result,com_cnt:result[0].com_cnt,like_cnt:result[0].pro_like,pro_cnt:view[0].pro_cnt})
                                         }else{
-                                                result[i].pro_no=false
+                                                res.send({ok:false})
                                         }
                                 }
-                                res.send({ok:true,list:result,com_cnt:result[0].com_cnt,like_cnt:result[0].pro_like,pro_cnt:result[0].pro_cnt})
-                        }else{
-                                res.send({ok:false})
-                        }
+                        })
                 }
         })
 }

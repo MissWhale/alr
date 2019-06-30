@@ -390,6 +390,7 @@ $timing:.3s;
                 position: absolute;
                 margin:12px 0px 0px 340px;
                 .dropdown-el {
+                        z-index:100;
                         min-width: 12em;
                         position: absolute;
                         display: inline-block;

@@ -555,6 +555,7 @@ $timing:.3s;
                         border-radius: 1em;
                         background-color: mix($color,#fff,25%);
                         transition: $timing all ease-in-out;  
+                        z-index:500;
                         input {
                                 display:none;
                         }
