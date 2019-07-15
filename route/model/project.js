@@ -13,7 +13,7 @@ exports.prolist=(req,res)=>{ //메인페이지
                 if(err) console.log(err)
                 else{
                         var count=result[0].count
-                        sql="select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a natural join project_version order by pro_no desc limit ?,?";
+                        sql="select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a ,project_version d ,(select MAX(pv_no) as ma from project_version GROUP BY pro_no) pv where d.pv_no=pv.ma and a.pro_no=d.pro_no order by a.pro_no desc limit ?,?";
                         db.query(sql,[start,max],(err,project)=>{
                                 if(err) console.log(err)
                                 else{
@@ -50,7 +50,8 @@ exports.workpage=(req,res)=>{
                 db.query(sql,pro_no,(err,result)=>{
                         if(err) console.log(err)
                 })
-                sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a natural join project_version natural join member where pro_no=?'
+                // sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a natural join project_version natural join member where pro_no=?'
+                sql='select *,(select count(*) from project_comment b where b.pro_no=a.pro_no) as com_cnt,(select count(*) from project_like b where b.pro_no=a.pro_no) as pro_like from project a NATURAL JOIN member ,project_version d ,(select MAX(pv_no) as ma from project_version GROUP BY pro_no) pv where d.pv_no=pv.ma and a.pro_no=d.pro_no and a.pro_no=?'
                 db.query(sql,pro_no,(err,result)=>{
                         if(err) console.log(err)
                         else{
@@ -104,31 +105,31 @@ exports.workpage=(req,res)=>{
         }
 }
 exports.result=(req,res)=>{
-        html='<body onclick="test()">'+req.body.html+'</body>'
+        html='<body>'+req.body.html+'</body>'
         css='<head><style>'+req.body.css+'</style></head>'
         js='<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script><script>'+req.body.js+'</script>'
         total=css+html+js
-        res.send({total:total})
-        // fs.readFile('./project_result/test.html','utf-8',(err,data)=>{
-        //         if(err) {
-        //                 console.log(err)
-        //                 fs.writeFile('./project_result/test.html',total,'utf-8',(err,data)=>{
-        //                         if(err) {
-        //                                 console.log(err)
-        //                         }else{
-        //                                 res.send({src:'test.html'})
-        //                         }
-        //                 })
-        //         }else{
-        //                 fs.writeFile('./project_result/test.html',total,'utf-8',(err,data)=>{
-        //                         if(err) {
-        //                                 console.log(err)
-        //                         }else{
-        //                                 res.send({src:'test.html'})
-        //                         }
-        //                 })
-        //         }
-        // })
+        // console.log(total)
+        fs.readFile('./project_result/test.html','utf-8',(err,data)=>{
+                if(err) {
+                        console.log(err)
+                        fs.writeFile('./project_result/test.html',total,'utf-8',(err,data)=>{
+                                if(err) {
+                                        console.log(err)
+                                }else{
+                                        res.send({total:total})
+                                }
+                        })
+                }else{
+                        fs.writeFile('./project_result/test.html',total,'utf-8',(err,data)=>{
+                                if(err) {
+                                        console.log(err)
+                                }else{
+                                        res.send({total:total})
+                                }
+                        })
+                }
+        })
 }
 exports.get_version_all=(req,res)=>{
         pro_no=req.body.pro_no

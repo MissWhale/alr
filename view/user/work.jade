@@ -4,6 +4,7 @@ include ../main.jade
         script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js")
         scirpt(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ext-language_tools.js")
+        //- scirpt(src="https://rawgithub.com/ajaxorg/ace-builds/master/src/ext-language_tools.js")
         //- script(src='../js/ace-editor-vue-component.js')
         script(src='../../js/ckeditor_basic/ckeditor.js')
         link(rel='stylesheet', href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css')
@@ -43,7 +44,7 @@ include ../main.jade
                                 .codejs#editor(data-num=2)
                 .resultdiv
                         .result#cap
-                                iframe#iframe(:src='src', frameborder="0" width='100%' name='re_page' marginwidth='0' marginheight='0' allow="midi *; geolocation *; microphone *; camera *; encrypted-media *;" sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" allowfullscreen="")
+                                iframe#iframe(:src='src', frameborder="0" width='100%' name='re_page' marginwidth='0' marginheight='0' )
                                 p(style='display:none') {{total}}              
 .workbtm
         button.allbtn.pr_comment 댓글
@@ -144,14 +145,13 @@ include ../main.jade
                 js=''
                 total=''
                 title=''
-                nick=''
                 version_name=''
-                pro_no='#{source.pro_no}'
+                pro_no=''
                 console.log(log)
-                console.log(pro_no)
+                //- console.log(pro_no)
                 $('.pr_comment').css('display','none')
                 if(log==0){
-                        theme='ace/theme/monokai'
+                        theme='ace/theme/xcode'
                         font='D2 coding'
                         size='12px'
                 }else{
@@ -182,16 +182,17 @@ include ../main.jade
                                 type:'post',
                                 data:{pro_no:pro_no},
                                 success:(result)=>{
+                                        num=result.list.length-1
                                         save.ver=result.list
-                                        save.pro_no=result.list[0].pro_no
-                                        save.pv_no=result.list[0].pv_no
+                                        save.pro_no=result.list[num].pro_no
+                                        save.pv_no=result.list[num].pv_no
                                         save.viewname='inline-block'
-                                        save.version_dl=result.list[0].ver_no
+                                        save.version_dl=result.list[num].ver_no
                                         save.new_check=0
                                         save.version_check='old'
                                         version.ver=result.list
-                                        version.version_dl=result.list[0].ver_no
-                                        version.ver_text=result.list[0].ver_text
+                                        version.version_dl=result.list[num].ver_no
+                                        version.ver_text=result.list[num].ver_text
                                         CKEDITOR.instances.write.setData(version.ver_text)
                                 }
                         })
@@ -216,7 +217,6 @@ include ../main.jade
                                                 type:'post',
                                                 data:{pro_no:pro_no},
                                                 success:(result)=>{
-                                                        console.log(result)
                                                         if(result.ok){
                                                                 comment.cl=result.list
                                                                 comment.com_cnt=result.com_cnt
@@ -366,6 +366,7 @@ include ../main.jade
                                 for(i=0;i<editorall.length;i++){
                                         editorall[i].setTheme(this.theme)
                                         editorall[i].setFontSize(this.size)
+                                        //- editorall[i].setOptions({enableBasicAutocompletion: true})
                                         $('div[id=editor]').eq(i).css('font-family',this.font)
                                 }
                         },
@@ -540,7 +541,6 @@ include ../main.jade
                 CKEDITOR.replace( 'write',{
                         filebrowserUploadUrl: '/board/imgupload',
                 });
-                console.log($('textarea[id="comment_write"]').length)
                 if($('textarea[id="comment_write"]').length){
                         CKEDITOR.replace( 'comment_write',{
                                 filebrowserUploadUrl: '/board/imgupload',
@@ -615,6 +615,7 @@ include ../main.jade
                 var editlen = $('div[id=editor]');
                 var editorall=new Array()
                 for(i=0;i<editlen.length;i++){
+                        ace.require("ace/ext/language_tools");
                         editor=ace.edit(editlen[i])
                         //- editor.setTheme("ace/theme/xcode");
                         editor.setTheme(worksetting.theme);
@@ -622,7 +623,7 @@ include ../main.jade
                                 showPrintMargin:false,
                                 wrap:true,
                                 fontSize:worksetting.size,
-                                fontFamily:worksetting.font
+                                fontFamily:worksetting.font,
                         })
                         editor.getSession().setWrapLimitRange();
                         editor.getSession().setMode(i==0 ? "ace/mode/html" : i==1 ? "ace/mode/css" : "ace/mode/javascript");
@@ -664,9 +665,12 @@ include ../main.jade
                                                 type:'post',
                                                 data:{html:result.html,css:result.css,js:result.js},
                                                 success:(data)=>{
-                                                        doc = $('iframe')[0].contentWindow.document; 
-                                                        $body = $('body',doc);
-                                                        $body.html(data.total)
+                                                        //- console.log(data)
+                                                        //- result.src=data.src
+                                                        $('#iframe').attr('src',"/project_result/test.html")
+                                                        //- doc = $('iframe')[0].contentWindow.document; 
+                                                        //- $body = $('body',doc);
+                                                        //- $body.html(data.total)
                                                         result.total=data.total
                                                 }
                                         })
